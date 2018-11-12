@@ -1,0 +1,96 @@
+---
+title: "A1"
+author: "Magnus Brogie, Rahul Duggal"
+date: "12 November 2018"
+# output: github_document
+---
+
+
+
+# Assignment 1
+## 1. Hur många percent av män respektive kvinnor är för och emot laglig abort?
+
+```{r }
+library(tidyverse)
+# install.packages("kableExtra")
+cont_table = matrix(
+  c(309, 191, 319, 281), # the data elements 
+  nrow=2,              # number of rows 
+  ncol=2,              # number of columns 
+  byrow = TRUE)  # fill matrix by rows 
+cont_table
+
+women_men = rowSums(cont_table)
+favor_against = colSums(cont_table)
+total = sum(cont_table)
+
+# Calculates percentages by matrix multiplication
+(percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
+colnames(percentages_matrix) <- c("In Favor", "Against")
+rownames(percentages_matrix) <- c("Women", "Men")
+percentages_matrix %>% knitr::kable()
+
+
+
+
+```
+
+
+
+
+## 2.
+Ide: Skiljer värdena i tabellen sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende?  Vi vill testa 
+$$
+\begin{aligned}
+H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
+       & \pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
+\begin{aligned}
+$$
+
+
+$$
+\begin{aligned}
+\chi^{2} &= \sum_{i = 1}^{k} \frac{(\text{observed} - \text{expected})^{2}}{\text{expected}}\\
+         &= \sum_{i = 1}^{k} \frac{(x_{i} - e_{i})^{2}}{e_{i}}
+\end{aligned}
+$$
+If 
+
+
+```{r hupp}
+library(tidyverse)
+# install.packages("kableExtra")
+cont_table = matrix(
+  c(309, 191, 319, 281), # the data elements 
+  nrow=2,              # number of rows 
+  ncol=2,              # number of columns 
+  byrow = TRUE)  # fill matrix by rows 
+cont_table
+
+women_men = rowSums(cont_table)
+favor_against = colSums(cont_table)
+total = sum(cont_table)
+
+
+# mapply(cont_table, f())
+```
+
+## 3.
+## 4.
+## 5.
+
+```{r cars}
+summary(cars)
+```
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
