@@ -28,14 +28,71 @@ total = sum(cont_table)
 (percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
 colnames(percentages_matrix) <- c("In Favor", "Against")
 rownames(percentages_matrix) <- c("Women", "Men")
-percentages_matrix %>% knitr::kable()
+percentages_matrix #  %>% knitr::kable()
 
+expected_matrix <- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
+expected_matrix
+cont_table
+cont_minus_expected <- cont_table - expected_matrix
+cont_minus_expected_squared  <- cont_minus_expected * cont_minus_expected
+test_matrix <- cont_minus_expected_squared / expected_matrix
+chi_two_statistic <- sum(test_matrix)
+chi_two_statistic 
 
 
 
 ```
 
+Procent anger antal hundradelar och noteras med %. Vi kan beräkna hur många procent $kn$ är av $m$ genom att ställa upp $100 \times n/m$. Detta fungerar eftersom vår siffersystem är decimalt. Således blir andelen kvinnor som är för laglig abort i procent $$100 \times \frac{\text{antal kvinnor för laglig abort}}{\text{totalt antal kvinnor}}$$ och andelen kvinnor som är emot laglig abort i procent $$100 \times \frac{\text{antal kvinnor mot laglig abort}}{\text{totalt antal kvinnor}}$$, och motsvarande för män. Dessa beräknar ger oss följande tabell med procent:   `
 
+```{r}
+(100 * percentages_matrix) %>% knitr::kable()
+```
+
+
+$$
+\begin{aligned} 
+G^{2} &= 2 \sum_{i, j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
+&=2n \sum_{i, j} \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
+\end{aligned}
+$$
+
+
+```{r geetwo}
+cont_table = matrix(
+  c(309, 191, 319, 281), # the data elements 
+  nrow=2,              # number of rows 
+  ncol=2,              # number of columns 
+  byrow = TRUE)  # fill matrix by rows 
+cont_table
+
+women_men = rowSums(cont_table)
+favor_against = colSums(cont_table)
+total = sum(cont_table)
+
+(percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
+colnames(percentages_matrix) <- c("In Favor", "Against")
+rownames(percentages_matrix) <- c("Women", "Men")
+percentages_matrix #  %>% knitr::kable()
+
+expected_matrix <- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
+expected_matrix
+cont_table
+sum(expected_matrix)
+obs_divided_by_expected <- cont_table / expected_matrix
+obs_divided_by_expected
+sapply(obs_divided_by_expected, log)
+log_obs_divided_by_expected <-  matrix(sapply(obs_divided_by_expected, log), nrow = 2)
+log_obs_divided_by_expected 
+obs_mult_by_log_obs_divided_by_expected <- cont_table * log_obs_divided_by_expected
+obs_mult_by_log_obs_divided_by_expected
+gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
+
+# f(x) <- function()
+
+
+
+```
 
 
 ## 2.
@@ -43,10 +100,11 @@ Ide: Skiljer värdena i tabellen sig signifikant från de som skulle förväntas
 $$
 \begin{aligned}
 H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
-       & \pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
-\begin{aligned}
+       &\pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
+\end{aligned}
 $$
 
+Persons $X^{2}$ statiskan kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är $\chi^{2}(f!!)$ fördelad och beräknas enligt följande
 
 $$
 \begin{aligned}
@@ -54,7 +112,17 @@ $$
          &= \sum_{i = 1}^{k} \frac{(x_{i} - e_{i})^{2}}{e_{i}}
 \end{aligned}
 $$
-If 
+
+där "expected", "$e_{i}$",  är de förväntade värdena i kontingenstabellen under hypotesen och "observed", "$x_{i}$", är motsvarande observerade värde i kontingens tabellen. Vi kan här använda godtycklig indexering så länge varje element i kontingenstabbellen indexeras exakt en gång med ett unikt index "$i$". 
+
+Under antagandet att antal som är för respektive emot laglig abort är oberoende av 
+kön gäller att $
+
+$$
+\pi_{ij} = \pi_{i+}\pi_{+j}
+$$
+där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$. Dessa sannolikhet har vi skattat i tabellen med sannolikhetsskattningarna $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$ ovan. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i+} =  \frac{n_{i+}}{n_{tot}}$ och motsvarande för kolumn $j$. Det ger oss att under antagandet att variablerna kvinna och man är oberoende följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i+}\widehat{\pi}_{+j}$. Dessa uträkningar ger oss chitvå `r chi_two_statistic`.  
+
 
 
 ```{r hupp}

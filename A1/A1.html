@@ -319,19 +319,11 @@ $(document).ready(function () {
 <div id="hur-manga-percent-av-man-respektive-kvinnor-ar-for-och-emot-laglig-abort" class="section level2">
 <h2>1. Hur många percent av män respektive kvinnor är för och emot laglig abort?</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package 'tidyverse' was built under R version 3.4.4</code></pre>
 <pre><code>## -- Attaching packages ---------------------------------- tidyverse 1.2.1 --</code></pre>
-<pre><code>## v ggplot2 3.0.0     v purrr   0.2.5
-## v tibble  1.4.1     v dplyr   0.7.4
-## v tidyr   0.8.1     v stringr 1.2.0
+<pre><code>## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.7
+## v tidyr   0.8.2     v stringr 1.3.1
 ## v readr   1.1.1     v forcats 0.3.0</code></pre>
-<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.4</code></pre>
-<pre><code>## Warning: package 'tibble' was built under R version 3.4.3</code></pre>
-<pre><code>## Warning: package 'tidyr' was built under R version 3.4.4</code></pre>
-<pre><code>## Warning: package 'readr' was built under R version 3.4.4</code></pre>
-<pre><code>## Warning: package 'purrr' was built under R version 3.4.4</code></pre>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.4.3</code></pre>
-<pre><code>## Warning: package 'forcats' was built under R version 3.4.4</code></pre>
 <pre><code>## -- Conflicts ------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
@@ -356,7 +348,27 @@ total = sum(cont_table)
 ## [2,] 53.16667 46.83333</code></pre>
 <pre class="r"><code>colnames(percentages_matrix) &lt;- c(&quot;In Favor&quot;, &quot;Against&quot;)
 rownames(percentages_matrix) &lt;- c(&quot;Women&quot;, &quot;Men&quot;)
-percentages_matrix %&gt;% knitr::kable()</code></pre>
+percentages_matrix #  %&gt;% knitr::kable()</code></pre>
+<pre><code>##        In Favor   Against
+## Women 0.6180000 0.3820000
+## Men   0.5316667 0.4683333</code></pre>
+<pre class="r"><code>expected_matrix &lt;- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
+expected_matrix</code></pre>
+<pre><code>##          [,1]     [,2]
+## [1,] 334.4876 170.0386
+## [2,] 297.0730 306.6988</code></pre>
+<pre class="r"><code>cont_table</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]  309  191
+## [2,]  319  281</code></pre>
+<pre class="r"><code>cont_minus_expected &lt;- cont_table - expected_matrix
+cont_minus_expected_squared  &lt;- cont_minus_expected * cont_minus_expected
+test_matrix &lt;- cont_minus_expected_squared / expected_matrix
+chi_two_statistic &lt;- sum(test_matrix)
+chi_two_statistic </code></pre>
+<pre><code>## [1] 8.297921</code></pre>
+<p>Procent anger antal hundradelar och noteras med %. Vi kan beräkna hur många procent <span class="math inline">\(kn\)</span> är av <span class="math inline">\(m\)</span> genom att ställa upp <span class="math inline">\(100 \times n/m\)</span>. Detta fungerar eftersom vår siffersystem är decimalt. Således blir andelen kvinnor som är för laglig abort i procent <span class="math display">\[100 \times \frac{\text{antal kvinnor för laglig abort}}{\text{totalt antal kvinnor}}\]</span> och andelen kvinnor som är emot laglig abort i procent <span class="math display">\[100 \times \frac{\text{antal kvinnor mot laglig abort}}{\text{totalt antal kvinnor}}\]</span>, och motsvarande för män. Dessa beräknar ger oss följande tabell med procent: `</p>
+<pre class="r"><code>(100 * percentages_matrix) %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -368,31 +380,97 @@ percentages_matrix %&gt;% knitr::kable()</code></pre>
 <tbody>
 <tr class="odd">
 <td>Women</td>
-<td align="right">0.6180000</td>
-<td align="right">0.3820000</td>
+<td align="right">61.80000</td>
+<td align="right">38.20000</td>
 </tr>
 <tr class="even">
 <td>Men</td>
-<td align="right">0.5316667</td>
-<td align="right">0.4683333</td>
+<td align="right">53.16667</td>
+<td align="right">46.83333</td>
 </tr>
 </tbody>
 </table>
+<p><span class="math display">\[
+\begin{aligned} 
+G^{2} &amp;= 2 \sum_{i, j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
+&amp;=2n \sum_{i, j} \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
+\end{aligned}
+\]</span></p>
+<pre class="r"><code>cont_table = matrix(
+  c(309, 191, 319, 281), # the data elements 
+  nrow=2,              # number of rows 
+  ncol=2,              # number of columns 
+  byrow = TRUE)  # fill matrix by rows 
+cont_table</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]  309  191
+## [2,]  319  281</code></pre>
+<pre class="r"><code>women_men = rowSums(cont_table)
+favor_against = colSums(cont_table)
+total = sum(cont_table)
+
+(percentages_matrix &lt;- diag(1 / women_men) %*% cont_table) * 100</code></pre>
+<pre><code>##          [,1]     [,2]
+## [1,] 61.80000 38.20000
+## [2,] 53.16667 46.83333</code></pre>
+<pre class="r"><code>colnames(percentages_matrix) &lt;- c(&quot;In Favor&quot;, &quot;Against&quot;)
+rownames(percentages_matrix) &lt;- c(&quot;Women&quot;, &quot;Men&quot;)
+percentages_matrix #  %&gt;% knitr::kable()</code></pre>
+<pre><code>##        In Favor   Against
+## Women 0.6180000 0.3820000
+## Men   0.5316667 0.4683333</code></pre>
+<pre class="r"><code>expected_matrix &lt;- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
+expected_matrix</code></pre>
+<pre><code>##          [,1]     [,2]
+## [1,] 334.4876 170.0386
+## [2,] 297.0730 306.6988</code></pre>
+<pre class="r"><code>cont_table</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]  309  191
+## [2,]  319  281</code></pre>
+<pre class="r"><code>sum(expected_matrix)</code></pre>
+<pre><code>## [1] 1108.298</code></pre>
+<pre class="r"><code>obs_divided_by_expected &lt;- cont_table / expected_matrix
+obs_divided_by_expected</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] 0.9238011 1.1232746
+## [2,] 1.0738102 0.9162083</code></pre>
+<pre class="r"><code>sapply(obs_divided_by_expected, log)</code></pre>
+<pre><code>## [1] -0.07925847  0.07121326  0.11624820 -0.08751149</code></pre>
+<pre class="r"><code>log_obs_divided_by_expected &lt;-  matrix(sapply(obs_divided_by_expected, log), nrow = 2)
+log_obs_divided_by_expected </code></pre>
+<pre><code>##             [,1]        [,2]
+## [1,] -0.07925847  0.11624820
+## [2,]  0.07121326 -0.08751149</code></pre>
+<pre class="r"><code>obs_mult_by_log_obs_divided_by_expected &lt;- cont_table * log_obs_divided_by_expected
+obs_mult_by_log_obs_divided_by_expected</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] -24.49087  22.20341
+## [2,]  22.71703 -24.59073</code></pre>
+<pre class="r"><code>gee_two &lt;- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
+
+# f(x) &lt;- function()</code></pre>
 </div>
 <div id="section" class="section level2">
 <h2>2.</h2>
 <p>Ide: Skiljer värdena i tabellen sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende? Vi vill testa <span class="math display">\[
 \begin{aligned}
 H_{0}: &amp; \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
-       &amp; \pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
-\begin{aligned}
+       &amp;\pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
+\end{aligned}
 \]</span></p>
+<p>Persons <span class="math inline">\(X^{2}\)</span> statiskan kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är <span class="math inline">\(\chi^{2}(f!!)\)</span> fördelad och beräknas enligt följande</p>
 <p><span class="math display">\[
 \begin{aligned}
 \chi^{2} &amp;= \sum_{i = 1}^{k} \frac{(\text{observed} - \text{expected})^{2}}{\text{expected}}\\
          &amp;= \sum_{i = 1}^{k} \frac{(x_{i} - e_{i})^{2}}{e_{i}}
 \end{aligned}
-\]</span> If</p>
+\]</span></p>
+<p>där “expected”, “<span class="math inline">\(e_{i}\)</span>”, är de förväntade värdena i kontingenstabellen under hypotesen och “observed”, “<span class="math inline">\(x_{i}\)</span>”, är motsvarande observerade värde i kontingens tabellen. Vi kan här använda godtycklig indexering så länge varje element i kontingenstabbellen indexeras exakt en gång med ett unikt index “<span class="math inline">\(i\)</span>”.</p>
+<p>Under antagandet att antal som är för respektive emot laglig abort är oberoende av kön gäller att $</p>
+<p><span class="math display">\[
+\pi_{ij} = \pi_{i+}\pi_{+j}
+\]</span> där <span class="math inline">\(\pi_{ij}\)</span> anger sannoliketen att en observation hamnar på rad <span class="math inline">\(i\)</span> och kolumn <span class="math inline">\(j\)</span>. Dessa sannolikhet har vi skattat i tabellen med sannolikhetsskattningarna <span class="math display">\[\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}\]</span> ovan. Vi kan även skatta sannolikheten att en observation hamnar i rad <span class="math inline">\(i\)</span> med <span class="math inline">\(\widehat{\pi}_{i+} = \frac{n_{i+}}{n_{tot}}\)</span> och motsvarande för kolumn <span class="math inline">\(j\)</span>. Det ger oss att under antagandet att variablerna kvinna och man är oberoende följande skattningar av de förväntade värdena <span class="math inline">\(\widehat{e}_{ij} = n\widehat{\pi}_{i+}\widehat{\pi}_{+j}\)</span>. Dessa uträkningar ger oss chitvå 8.2979214.</p>
 <pre class="r"><code>library(tidyverse)
 # install.packages(&quot;kableExtra&quot;)
 cont_table = matrix(
