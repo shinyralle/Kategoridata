@@ -52,8 +52,8 @@ Procent anger antal hundradelar och noteras med %. Vi kan beräkna hur många pr
 
 $$
 \begin{aligned} 
-G^{2} &= 2 \sum_{i, j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
-&=2n \sum_{i, j} \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
+G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
+&=2n \sum_{i} \sum_{j}  \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
 \end{aligned}
 $$
 
@@ -67,7 +67,10 @@ cont_table = matrix(
 cont_table
 
 women_men = rowSums(cont_table)
+women_men
+diag(1 / women_men)
 favor_against = colSums(cont_table)
+favor_against
 total = sum(cont_table)
 
 (percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
@@ -75,18 +78,34 @@ colnames(percentages_matrix) <- c("In Favor", "Against")
 rownames(percentages_matrix) <- c("Women", "Men")
 percentages_matrix #  %>% knitr::kable()
 
-expected_matrix <- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
+expected_matrix <- total *  ((women_men / total)) %*%  t((favor_against / total))
+
+shift.column(diag((favor_against / total)))
+
+(diag(1 / women_men)  %*% cont_table) 
+(cont_table %*% diag(1 / favor_against))
+
+total * (cont_table %*% diag(1 / favor_against)) * (diag(1 / women_men)  %*% cont_table)
+
 expected_matrix
 cont_table
 sum(expected_matrix)
 obs_divided_by_expected <- cont_table / expected_matrix
 obs_divided_by_expected
 sapply(obs_divided_by_expected, log)
+ matrix(sapply(obs_divided_by_expected, log), nrow = 2)
 log_obs_divided_by_expected <-  matrix(sapply(obs_divided_by_expected, log), nrow = 2)
 log_obs_divided_by_expected 
 obs_mult_by_log_obs_divided_by_expected <- cont_table * log_obs_divided_by_expected
 obs_mult_by_log_obs_divided_by_expected
 gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
+gee_two
+309*log(309/((628/1100)*(500/1100)*1100)) +
+191*log(191/((472/1100)*(500/1100)*1100)) +
+319*log(319/((628/1100)*(600/1100)*1100)) +
+281*log(281/((472/1100)*(600/1100)*1100)) 
+
+(309/628)*(309/500)*1100
 
 # f(x) <- function()
 
@@ -108,20 +127,19 @@ Persons $X^{2}$ statiskan kan användas för att testa en hypotetisk fördelning
 
 $$
 \begin{aligned}
-\chi^{2} &= \sum_{i = 1}^{k} \frac{(\text{observed} - \text{expected})^{2}}{\text{expected}}\\
-         &= \sum_{i = 1}^{k} \frac{(x_{i} - e_{i})^{2}}{e_{i}}
+\chi^{2} &= \sum_{i} \sum_{j}  \frac{(\text{observed} - \text{expected})^{2}}{\text{expected}}\\
+         &= \sum_{i} \sum_{j}  \frac{(x_{ij} - e_{ij})^{2}}{e_{ij}}
 \end{aligned}
 $$
-
-där "expected", "$e_{i}$",  är de förväntade värdena i kontingenstabellen under hypotesen och "observed", "$x_{i}$", är motsvarande observerade värde i kontingens tabellen. Vi kan här använda godtycklig indexering så länge varje element i kontingenstabbellen indexeras exakt en gång med ett unikt index "$i$". 
+j
+där "expected", "$e_{ij}$",  är de förväntade värdena i kontingenstabellen på rad $i$ och kolumn $j$ under hypotesen och "observed", "$x_{ij}$", är motsvarande observerade värde i kontingenstabellen.
 
 Under antagandet att antal som är för respektive emot laglig abort är oberoende av 
-kön gäller att $
-
+kön gäller att
 $$
-\pi_{ij} = \pi_{i+}\pi_{+j}
+\pi_{ij} = \pi_{i\circ}\pi_{\circ j}
 $$
-där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$. Dessa sannolikhet har vi skattat i tabellen med sannolikhetsskattningarna $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$ ovan. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i+} =  \frac{n_{i+}}{n_{tot}}$ och motsvarande för kolumn $j$. Det ger oss att under antagandet att variablerna kvinna och man är oberoende följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i+}\widehat{\pi}_{+j}$. Dessa uträkningar ger oss chitvå `r chi_two_statistic`.  
+där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Dessa sannolikhet kan skatta i tabellen med sannolikhetsskattningarna $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $\n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och motsvarande för kolumn $j$. Det ger oss att under antagandet att variablerna kvinna och man är oberoende följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska `r chi_two_statistic` som vi kan jämföra med en tabell.  
 
 
 
@@ -142,6 +160,17 @@ total = sum(cont_table)
 
 # mapply(cont_table, f())
 ```
+
+
+
+$$
+\begin{aligned} 
+G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
+&=2n \sum_{i} \sum_{j}  \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
+\end{aligned}
+$$
+
+
 
 ## 3.
 ## 4.
