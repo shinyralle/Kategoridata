@@ -171,7 +171,9 @@ $$
 
 
 ## 3.
-Vi vill ställa upp odds-kvoten 
+Vi vill med hjälp av de observerade värdena estimera den odds-kvot som anger hur många gånger större oddsen att en man är emot laglig abort, denoterad $\Omega_{m}$ än oddsen att en kvinna är det, dennoterad $\Omega_{k}$. Det vill säga vi vill estimera oddskvoten
+
+$$ \text{ oddskvot } = \frac{\text{ odds att en man är emot laglig abort }}{ \text{ odds att en kvinna är emot laglig abort }} =\frac{\Omega_{m}}{} $$
 
 
 ## 4.
