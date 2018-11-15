@@ -2,7 +2,7 @@
 title: "A1"
 author: "Magnus Brogie, Rahul Duggal"
 date: "12 November 2018"
-# output: github_document
+output: github_document
 ---
 
 
@@ -80,7 +80,7 @@ percentages_matrix #  %>% knitr::kable()
 
 expected_matrix <- total *  ((women_men / total)) %*%  t((favor_against / total))
 
-shift.column(diag((favor_against / total)))
+# shift.column(diag((favor_against / total)))
 
 (diag(1 / women_men)  %*% cont_table) 
 (cont_table %*% diag(1 / favor_against))
@@ -115,15 +115,15 @@ gee_two
 
 
 ## 2.
-Ide: Skiljer värdena i tabellen sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende?  Vi vill testa 
+Skiljer värdena i tabellen sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende?  Vi vill testa 
 $$
 \begin{aligned}
 H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
-       &\pi_{ij} = \pi_{i+}\pi_{+j} \text{ för alla $i$ och $j$}
+       &\pi_{ij} = \pi_{i\circ}\pi_{\circ j} \text{ för alla $i$ och $j$}
 \end{aligned}
 $$
 
-Persons $X^{2}$ statiskan kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är $\chi^{2}(f!!)$ fördelad och beräknas enligt följande
+Persons $X^{2}$ statiska kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är $\chi^{2}(f!!)$ FIXA! fördelad och beräknas enligt följande
 
 $$
 \begin{aligned}
@@ -131,7 +131,7 @@ $$
          &= \sum_{i} \sum_{j}  \frac{(x_{ij} - e_{ij})^{2}}{e_{ij}}
 \end{aligned}
 $$
-j
+
 där "expected", "$e_{ij}$",  är de förväntade värdena i kontingenstabellen på rad $i$ och kolumn $j$ under hypotesen och "observed", "$x_{ij}$", är motsvarande observerade värde i kontingenstabellen.
 
 Under antagandet att antal som är för respektive emot laglig abort är oberoende av 
@@ -139,9 +139,7 @@ kön gäller att
 $$
 \pi_{ij} = \pi_{i\circ}\pi_{\circ j}
 $$
-där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Dessa sannolikhet kan skatta i tabellen med sannolikhetsskattningarna $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $\n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och motsvarande för kolumn $j$. Det ger oss att under antagandet att variablerna kvinna och man är oberoende följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska `r chi_two_statistic` som vi kan jämföra med en tabell.  
-
-
+där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Sannolikheten $\pi_{ij}$ kan skattas med hjälp av observationera i kontingens tabellen på följande vis $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $\n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och $n_{+j}$ motsvarande för kolumn $j$. Det ger oss att under nollhypotesen följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska med HUR MÅNGA FRIHETSGRADER `r chi_two_statistic` som vi kan jämföra med en tabell.  
 
 ```{r hupp}
 library(tidyverse)
@@ -173,7 +171,12 @@ $$
 
 
 ## 3.
+Vi vill ställa upp odds-kvoten 
+
+
 ## 4.
+
+
 ## 5.
 
 ```{r cars}
@@ -191,3 +194,4 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
