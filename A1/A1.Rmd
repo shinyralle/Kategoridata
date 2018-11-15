@@ -215,7 +215,7 @@ hoger_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.025) * se_logstickprovso
 
 ```
 
-standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot})$ är `r se_logstickprovsoddskvot` och att konfidensintervallet för blir ('r vanster_und',''). 
+standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot})$ är `r se_logstickprovsoddskvot` och att konfidensintervallet för blir (`r vanster_andpunkt`,`r hoger_andpunkt`). 
 
 
 
