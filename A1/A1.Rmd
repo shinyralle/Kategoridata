@@ -210,12 +210,13 @@ se_logstickprovsoddskvot = sqrt((1/n11)+(1/n12)+(1/n21)+(1/n22))
 
 qnorm(0.975)
 
-vanster_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.975) * se_logstickprovsoddskvot)
-hoger_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.025) * se_logstickprovsoddskvot)
+hoger_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.975) * se_logstickprovsoddskvot)
+vanster_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.025) * se_logstickprovsoddskvot)
+stickprovsoddskvot
 
 ```
 
-standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot})$ är `r se_logstickprovsoddskvot` och att konfidensintervallet för blir (`r vanster_andpunkt`,`r hoger_andpunkt`). 
+standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot}) = 1.425085$  och att konfidensintervallet för blir (`r vanster_andpunkt`,`r hoger_andpunkt`). 
 
 
 
