@@ -189,7 +189,7 @@ $$ \begin{aligned}
 med stickprovsoddskvoten 
 
 $$ \begin{aligned} 
-\text{ stickprovs oddskvot } &= \frac{\text{ stickprovsodds att en man är emot laglig abort }}{ \text{ stickprovsodds att en kvinna är emot laglig abort }}\\ &=\frac{\widehat{\Omega}_{m}}{\widehat{\Omega}_{k}}\\
+\text{ stickprovsoddskvot } &= \frac{\text{ stickprovsodds att en man är emot laglig abort }}{ \text{ stickprovsodds att en kvinna är emot laglig abort }}\\ &=\frac{\widehat{\Omega}_{m}}{\widehat{\Omega}_{k}}\\
 &= \frac{\text{ (stickprovssannolikheten att en man är emot laglig abort)/(stickprovssannolikheten att en man är för laglig abort) }}{ \text{ (stickprovssannolikheten att en kvinna är emot laglig abort)/(stickprovssannolikheten att en kvinna är för laglig abort) }}\\
 &= \frac{\widehat{\pi}_{j = 2| i = 2}/(1-\widehat{\pi}_{j = 2| i = 2})}{\widehat{\pi}_{j = 1 | i = 2}/(1-\widehat{\pi}_{j = 1 | i = 2})}\\
 &= \frac{(n_{22}/n_{2+})/(n_{21}/n_{2+})}{(n_{12}/n_{1+})/(n_{11}/n_{1+})}\\
@@ -198,12 +198,24 @@ $$ \begin{aligned}
 
 Gör vi dessa uträkningar så får vi stickprovsoddskvoten `r stickprovsoddskvot`. Under antagande att enkätdatan är multinomialfördelad gäller att standardefelet för oddskvoten kan estimeras med  
 
-$$ \widehat{\sigma}(\log \widehat{\theta}) = \sqrt{\left(\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{12}}\right)}$$
+$$ \widehat{\sigma}(\log (\text{stickprovsoddskvot})) = \sqrt{\left(\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{12}}\right)}$$
 
 Se ekvation 3.1 på sid 70 i kurslitteraturen. Vidare, gäller per normaliteten av $\log \widehat{\theta}$ för stora stickprov, att  
 
-$$ \log \widehat{\theta} \pm z_{} $$
+$$ \log \widehat{\theta} \pm z_{0.025} \widehat{\sigma}(\log \widehat{\theta}).$$
+ger oss ett konfidensintervall med konfidensgrad $0.05$. Se sid. 71 i kurslitteraturen, och vi kan exponentiera ändpunkterna av detta intervall för att få ett konfidensintervall för $$\widehat{\theta}$$. När vi genomför beräkningarna enligt ovan får vi att
 
+```{r}
+se_logstickprovsoddskvot = sqrt((1/n11)+(1/n12)+(1/n21)+(1/n22)) 
+
+qnorm(0.975)
+
+vanster_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.975) * se_logstickprovsoddskvot)
+hoger_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.025) * se_logstickprovsoddskvot)
+
+```
+
+standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot})$ är `r se_logstickprovsoddskvot` och att konfidensintervallet för blir ('r vanster_und',''). 
 
 
 
