@@ -93,17 +93,17 @@ sum(expected_matrix)
 obs_divided_by_expected <- cont_table / expected_matrix
 obs_divided_by_expected
 sapply(obs_divided_by_expected, log)
- matrix(sapply(obs_divided_by_expected, log), nrow = 2)
+matrix(sapply(obs_divided_by_expected, log), nrow = 2)
 log_obs_divided_by_expected <-  matrix(sapply(obs_divided_by_expected, log), nrow = 2)
 log_obs_divided_by_expected 
 obs_mult_by_log_obs_divided_by_expected <- cont_table * log_obs_divided_by_expected
 obs_mult_by_log_obs_divided_by_expected
 gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
-gee_two
-309*log(309/((628/1100)*(500/1100)*1100)) +
+gee_two <- 2 * (309*log(309/((628/1100)*(500/1100)*1100)) +
 191*log(191/((472/1100)*(500/1100)*1100)) +
 319*log(319/((628/1100)*(600/1100)*1100)) +
-281*log(281/((472/1100)*(600/1100)*1100)) 
+281*log(281/((472/1100)*(600/1100)*1100)))
+
 
 (309/628)*(309/500)*1100
 
@@ -196,7 +196,7 @@ $$ \begin{aligned}
 &= \frac{n_{22}n_{11}}{n_{12}n_{21}}
 \end{aligned}$$
 
-Gör vi dessa uträkningar så får vi stickprovsoddskvoten `r stickprovsoddskvot`. Under antagande att enkätdatan är multinomialfördelad gäller att standardefelet för oddskvoten kan estimeras med  
+Gör vi dessa uträkningar så får vi stickprovsoddskvoten `r stickprovsoddskvot`.  Med andra ord är vårt estimat är oddset att en man är emot laglig abort `r stickprovsoddskvot` så högt som oddset att en kvinna är det.  Under antagande att enkätdatan är multinomialfördelad gäller att standardefelet för oddskvoten kan estimeras med  
 
 $$ \widehat{\sigma}(\log (\text{stickprovsoddskvot})) = \sqrt{\left(\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{12}}\right)}$$
 
@@ -223,22 +223,103 @@ standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot}) = 1.425085$  och
 
 ## 4.
 
+Vi vill estimera hur många gånger större sannolikheten är att en man är emot laglig abort än att en kvinna är emot laglig abort. Det vill säga vi vill estimera riskkvoten, vilken är kvoten mellan sannoliketen att en man är emot laglig abort och sannolikheten att en kvinna är emot laglig abort. Denna ges av 
 
-## 5.
+$$
+\text{ riskkvot } = \frac{\pi_{j = 2|i = 2}}{\pi_{j = 2|i = 1}}
+$$
+där $i$ är radindex och $j$ kolumn index. Denna estimerar vi med
 
-```{r cars}
-summary(cars)
+$$
+\begin{aligned}
+\text{ stickprovsriskkvot } &= \frac{\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}\\
+&= \frac{(n_{22}/n_{2+})}{(n_{12}/n_{1+})}
+\end{aligned}
+$$
+
+
+```{r}
+stickprovsriskkvot <- (n22/ women_men[2])/(n12 / women_men[1])
+women_men[2]
+n22
+```
+
+och när vi räknar ut denna får vi att den blir `r stickprovsriskkvot`. Vi räknar med hjälp av formeln 3.5 på sida 71 ut standradfelet för stickprovsriskkvoten, nedan:
+
+$$
+\begin{aligned}
+\widehat{\sigma}\left(
+\log \left(
+\frac{\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}
+\right) 
+\right) &= \sqrt{
+\frac{1 - \widehat{\pi}_{j = 2|i = 2}}{n_{22}} + \frac{1 - \widehat{\pi}_{j = 2|i = 1}}{n_{12}}
+}\\
+&= \sqrt{
+\frac{1 - n_{22}/n_{2+} }{n_{22}} + \frac{1 - n_{12}/n_{1+}}{n_{12}}
+}
+\end{aligned}
+$$
+
+
+
+```{r}
+se_log_stickprovsriskkvot <- sqrt(((1 - (n22/ women_men[2]))/ women_men[2]) + ((1 - (n12 / women_men[1]))/ women_men[1]))
+
+```
+
+och räknar vi ut denna genom att mata in värden så blir det `r se_log_stickprovsriskkvot`. Med andra ord är vårt estimat att män är `r se_log_stickprovsriskkvot` så sannolika att vara emot laglig abort som kvinnor. Vi kan sedan skapa konfidensintervallet för stickprovssriskkvoten med hjälp av formeln för ändamålet på sid  71 i kurslitteraturen
+
+$$
+\log \left(
+\frac{
+\widehat{\pi}_{j = 2|i = 2}}{
+\widehat{\pi}_{j = 2|i = 1}}
+\right)
+\pm z_{0.025}\widehat{\sigma}
+\left(
+\log \left(
+\frac{
+\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}
+\right)
+\right)
+$$.
+
+Det vill säga
+
+$$
+\log \left(
+\frac{
+n_{22}/ n_{2+} }{
+n_{12} / n_{1+}}
+\right)
+\pm z_{0.025}\sqrt{
+\frac{1 - n_{22}/n_{2+} }{n_{22}} + \frac{1 - n_{12}/n_{1+}}{n_{12}}
+}
+$$.
+Vilket ger oss konfidensintervallet 
+
+```{r}
+vanster_andpunkt2 <- exp(
+  log((n22/ women_men[2])/(n12 / women_men[1])) + qnorm(0.025)*sqrt((1 - n22/women_men[2])/n22 + (1 - n12/women_men[1])/n12)
+)
+
+hoger_andpunkt2 <- exp(
+  log((n22/ women_men[2])/(n12 / women_men[1])) + qnorm(0.975)*sqrt((1 - n22/women_men[2])/n22 + (1 - n12/women_men[1])/n12)
+)
+  
+(n22/ women_men[2])/(n12 / women_men[1]) 
+
+```
+
+(`r vanster_andpunkt2`, `r hoger_andpunkt2`) med konfidensgrad $0.05$. Vi kan notera att noll inte ligger på detta intervall. Således är riskkvoten signifikant skild från noll.
+
+## 1:2
+
+```{r}
+
 ```
 
 
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
