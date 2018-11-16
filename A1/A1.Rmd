@@ -167,17 +167,35 @@ stickprovsoddskvot <- (n22 * n11)/(n12 * n21)
 ```
 
 
+Vi kan även testa $H_{0}$ med hjälp av $G^{2}$ statistikan, som beräknas som följer
 
 $$
 \begin{aligned} 
-G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
-&=2n \sum_{i} \sum_{j}  \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
+G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \log \left( 
+\frac{\text{observed}}{\text{expected}} 
+\right)\\
+&=2 \sum_{i} \sum_{j}  x_{ij} \log 
+\left( 
+\frac{x_{ij}}{e_{ij}} 
+\right)
 \end{aligned}
 $$
 
-
+Vid inmatning av värdena från den aktuella kontingenstabellen evalueras $G^{2}$ till `r gee_two`. Den $G^{2}$-statistikan är VAD!? fördelad med HUR MÅNGA FRIHETSGRADER? frihetsgrader. Sannolikheten att få de observerade värdena under nollhypotesen är VAD? BEHöVERGöRAS!!!.  
 
 ## 3.
+Oddsen att en man är emot laglig abort ges av
+
+$$
+\frac{
+\text{ sannolikheten att en man är emot laglig abort }
+}{
+\text{ sannolikheten att en man är för laglig abort }
+}.
+$$
+
+Det vill säga oddsen anger hur många gånger sannolikare det är att en man är emot laglig abort än att den är för laglig abort. 
+
 Vi vill med hjälp av de observerade värdena estimera den odds-kvot som anger hur många gånger större oddsen att en man är emot laglig abort, denoterad $\Omega_{m}$, än oddsen att en kvinna är det, denoterad $\Omega_{k}$. Det vill säga vi vill estimera oddskvoten 
 
 $$ \begin{aligned} 
@@ -317,9 +335,146 @@ hoger_andpunkt2 <- exp(
 ## 1:2
 
 ```{r}
+m11 = 557
+m12 = 1835 - 557
+m21 = 1198
+m22 = 2691 - 1198
+
+cont_table2 <- as.table(rbind(c(m11, m12), c(m21, m22)))
+cont_table2
+dimnames(cont_table2) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
+
+# cont_table2 <- matrix(
+#   c(m11, m12, m21, m22), # the data elements 
+#   nrow=2,              # number of rows 
+#   ncol=2,              # number of columns 
+#   byrow = TRUE)  # fill matrix by rows 
+# rownames(cont_table2) <- c('women', 'men')
+# colnames(cont_table2) <- c('admitted', 'not_admitted')
+cont_table2
+
+women_men2 <- rowSums(cont_table2)
+admitted_not2 <- colSums(cont_table2)
+total2 <- sum(cont_table2)
+
+percentages_matrix2 <- (diag(1 / women_men) %*% cont_table2) * 100
+
+
+
+#Calculate X2, G2 and p-values
+pearsonX2 <- chisq.test(cont_table2,correct=FALSE)
+pearsonX2
+pearsonX2_statistic <- pearsonX2$statistic
+pearsonX2_p <- pearsonX2$p.value
+
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+summary(loglm(~gender+admission,cont_table2))%>% knitr::kable()
+summary(loglm(~gender+admission,cont_table2))
+gee2pearsonX2 <- summary(loglm(~gender+admission,cont_table2))
+gee2pearsonX2$tests
+
+gee2_statistic <- gee2$pearson
+
+#------------------------------------------------------------------------------------------
+
+#Calculate risk/odds ratio and confidence interval
+library(epitools)    # the epitools package must be installed #
+oddsratio2 <- oddsratio(cont_table2,rev="both")
+odds_ratio2statistic <- oddsratio2$measure
+
+odds_ratio2statistic
+oddsratio2$measure
+
+riskratio2 <- riskratio(cont_table2,rev="both")  
+  
+```
+
+`r percentagematrix2 %>% knitr::kable()`
+`r gee2pearsonX2$tests %>% knitr::kable()`
+`r oddsratio2$measure %>% knitr::kable()`
+`r riskratio2$measure %>% knitr::kable()`
+
+DBBL KLLA att det blir rätt riskratio oddsratio 
+
+
+```{r}
+m11_tenth = round(m11/10)
+m12_tenth = round(m12/10)
+m21_tenth = round(m21/10)
+m22_tenth = round(m22/10)
+
+
+cont_table3 <- as.table(rbind(c(m11_tenth, m12_tenth), c(m21_tenth, m22_tenth)))
+dimnames(cont_table3) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
+
+# cont_table3 <- matrix(
+#   c(m11_tenth, m12_tenth, m21_tenth, m22_tenth), # the data elements 
+#   nrow=2,              # number of rows 
+#   ncol=2,              # number of columns 
+#   byrow = TRUE)  # fill matrix by rows 
+# cont_table
+
+women_men3 = rowSums(cont_table3)
+admitted_not3 = colSums(cont_table3)
+total3 = sum(cont_table3)
+percentages_matrix <- (diag(1 / women_men3) %*% cont_table3) * 100
+
+
+#Calculate X2, G2 and p-values
+chisq.test(cont_table3,correct=FALSE)
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+loglm(~gender+admission,cont_table2)
+
+#------------------------------------------------------------------------------------------
+
+#Calculate risk/odds ratio and confidence interval
+library(epitools)    # the epitools package must be installed #
+oddsratio(cont_table3,rev="neither")
+riskratio(cont_table3,rev="neither")  
+```
+
+`r percentagematrix3 %>% knitr::kable()`
+`r gee2pearsonX3$tests %>% knitr::kable()`
+`r oddsratio3$measure %>% knitr::kable()`
+`r riskratio3$measure %>% knitr::kable()`
+
+```{r}
+m11_hundreth = round(m11/100)
+m12_hundreth = round(m12/100)
+m21_hundreth = round(m21/100)
+m22_hundreth = round(m22/100)
+
+cont_table4 <- as.table(rbind(c(m11_hundreth, m12_hundreth), c(m21_hundreth, m22_hundreth)))
+dimnames(cont_table4) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
+
+# cont_table4 <- matrix(
+#   c(m11_hundreth, m12_hundreth, m21_hundreth, m22_hundreth), # the data elements 
+#   nrow=2,              # number of rows 
+#   ncol=2,              # number of columns 
+#   byrow = TRUE)  # fill matrix by rows 
+# cont_table
+
+women_men4 = rowSums(cont_table4)
+admitted_not4 = colSums(cont_table4)
+total4 = sum(cont_table4)
+percentages_matrix <- (diag(1 / women_men4) %*% cont_table4) * 100
+
+
+#Calculate X2, G2 and p-values
+chisq.test(cont_table4,correct=FALSE)
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+loglm(~gender+admission,cont_table4)
+
+#------------------------------------------------------------------------------------------
+
+#Calculate risk/odds ratio and confidence interval
+library(epitools)    # the epitools package must be installed #
+oddsratio(cont_table4,rev="neither")
+riskratio(cont_table4,rev="neither")  
 
 ```
 
-
-
-
+`r percentagematrix4 %>% knitr::kable()`
+`r gee2pearsonX4$tests %>% knitr::kable()`
+`r oddsratio4$measure %>% knitr::kable()`
+`r riskratio4$measure %>% knitr::kable()`

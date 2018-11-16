@@ -31,4 +31,4 @@ riskratio(tab1,rev="neither")
 oddsratio(tab1,rev="row")
 oddsratio(tab1,rev="col")
 oddsratio(tab1,rev="both")
-
+riskratio(tab1,rev="both")
