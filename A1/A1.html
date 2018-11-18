@@ -319,12 +319,12 @@ $(document).ready(function () {
 <div id="hur-manga-percent-av-man-respektive-kvinnor-ar-for-och-emot-laglig-abort" class="section level2">
 <h2>1. Hur många percent av män respektive kvinnor är för och emot laglig abort?</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages ---------------------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## -- Attaching packages -------------------------------------------------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
 <pre><code>## v ggplot2 3.0.0     v purrr   0.2.5
 ## v tibble  1.4.2     v dplyr   0.7.6
 ## v tidyr   0.8.1     v stringr 1.3.1
 ## v readr   1.1.1     v forcats 0.3.0</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------------------------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ----------------------------------------------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>tab1&lt;- as.table(rbind(c(309, 191), c(319, 281)))
@@ -693,7 +693,7 @@ oddsratio(tab1,rev=&quot;neither&quot;)</code></pre>
 <p>(1.065465, 1.4107311) med konfidensgrad <span class="math inline">\(0.05\)</span>. Vi kan notera att noll inte ligger på detta intervall. Således är riskkvoten signifikant skild från noll.</p>
 <p>Motsvarande estimat när man använder den till uppgiften bifogade testkoden blir:</p>
 <pre class="r"><code>library('epitools') # the epitools package must be installed #
-oddsratio(tab1,rev=&quot;neither&quot;)$measure %&gt;% knitr::kable()</code></pre>
+riskratio(tab1,rev=&quot;neither&quot;)$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -712,181 +712,35 @@ oddsratio(tab1,rev=&quot;neither&quot;)$measure %&gt;% knitr::kable()</code></pr
 </tr>
 <tr class="even">
 <td>men</td>
-<td align="right">1.424397</td>
-<td align="right">1.119315</td>
-<td align="right">1.814751</td>
+<td align="right">1.226004</td>
+<td align="right">1.065465</td>
+<td align="right">1.410731</td>
 </tr>
 </tbody>
 </table>
+<p>Vid jämförande av våra resultat med dessa finner vi att det är små skillnader som förhoppningsvis kan förklaras av avrundningar eller motsvarande.</p>
+<!-- ## 5 -->
+<!-- ```{r} -->
+<!-- # Generate a frequency table and calculate row percentage -->
+<!-- tab1<- as.table(rbind(c(309, 191), c(319, 281))) -->
+<!-- dimnames(tab1) <- list(gender = c("women", "men"),opinion = c("favor","against")) -->
+<!-- addmargins(tab1) -->
+<!-- addmargins(prop.table(tab1,1),2) # To get column percentages: addmargins(prop.table(tab1,2),1) # -->
+<!-- # Calculate X2, G2 and p-values -->
+<!-- chisq.test(tab1,correct=FALSE) -->
+<!-- library(MASS) # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...) # -->
+<!-- loglm(~gender+opinion,tab1) -->
+<!-- # Calculate risk/odds ratio and confidence interval -->
+<!-- library('epitools') # the epitools package must be installed # -->
+<!-- oddsratio(tab1,rev="neither") -->
+<!-- riskratio(tab1,rev="neither") -->
+<!-- # To get the intended odds/risk ratio, you may need to reverse the rows or columns. -->
+<!-- oddsratio(tab1,rev="row") -->
+<!-- oddsratio(tab1,rev="col") -->
+<!-- oddsratio(tab1,rev="both") -->
+<!-- ``` -->
 </div>
 <div id="section-3" class="section level2">
-<h2>5</h2>
-<p>Vid jämförande av våra resultat med de som genereras av koden nedan finner vi att det är små skillnader här och var som förhoppningsvis kan förklaras av avrundning och inte av logiska fel i vår kod.</p>
-<pre class="r"><code># Generate a frequency table and calculate row percentage
-tab1&lt;- as.table(rbind(c(309, 191), c(319, 281)))
-dimnames(tab1) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;),opinion = c(&quot;favor&quot;,&quot;against&quot;))
-addmargins(tab1)</code></pre>
-<pre><code>##        opinion
-## gender  favor against  Sum
-##   women   309     191  500
-##   men     319     281  600
-##   Sum     628     472 1100</code></pre>
-<pre class="r"><code>addmargins(prop.table(tab1,1),2) # To get column percentages: addmargins(prop.table(tab1,2),1) #</code></pre>
-<pre><code>##        opinion
-## gender      favor   against       Sum
-##   women 0.6180000 0.3820000 1.0000000
-##   men   0.5316667 0.4683333 1.0000000</code></pre>
-<pre class="r"><code># Calculate X2, G2 and p-values
-chisq.test(tab1,correct=FALSE)</code></pre>
-<pre><code>## 
-##  Pearson's Chi-squared test
-## 
-## data:  tab1
-## X-squared = 8.2979, df = 1, p-value = 0.003969</code></pre>
-<pre class="r"><code>library(MASS) # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...) #</code></pre>
-<pre><code>## 
-## Attaching package: 'MASS'</code></pre>
-<pre><code>## The following object is masked from 'package:dplyr':
-## 
-##     select</code></pre>
-<pre class="r"><code>loglm(~gender+opinion,tab1)</code></pre>
-<pre><code>## Call:
-## loglm(formula = ~gender + opinion, data = tab1)
-## 
-## Statistics:
-##                       X^2 df    P(&gt; X^2)
-## Likelihood Ratio 8.322320  1 0.003916088
-## Pearson          8.297921  1 0.003969048</code></pre>
-<pre class="r"><code># Calculate risk/odds ratio and confidence interval
-library('epitools') # the epitools package must be installed #
-oddsratio(tab1,rev=&quot;neither&quot;)</code></pre>
-<pre><code>## $data
-##        opinion
-## gender  favor against Total
-##   women   309     191   500
-##   men     319     281   600
-##   Total   628     472  1100
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender  estimate    lower    upper
-##   women 1.000000       NA       NA
-##   men   1.424397 1.119315 1.814751
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   women          NA           NA          NA
-##   men   0.003990219  0.004071121 0.003969048
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-<pre class="r"><code>riskratio(tab1,rev=&quot;neither&quot;)</code></pre>
-<pre><code>## $data
-##        opinion
-## gender  favor against Total
-##   women   309     191   500
-##   men     319     281   600
-##   Total   628     472  1100
-## 
-## $measure
-##        risk ratio with 95% C.I.
-## gender  estimate    lower    upper
-##   women 1.000000       NA       NA
-##   men   1.226003 1.065465 1.410731
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   women          NA           NA          NA
-##   men   0.003990219  0.004071121 0.003969048
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
-<pre class="r"><code># To get the intended odds/risk ratio, you may need to reverse the rows or columns.
-oddsratio(tab1,rev=&quot;row&quot;)</code></pre>
-<pre><code>## $data
-##        opinion
-## gender  favor against Total
-##   men     319     281   600
-##   women   309     191   500
-##   Total   628     472  1100
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender   estimate     lower     upper
-##   men   1.0000000        NA        NA
-##   women 0.7020317 0.5510397 0.8934032
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   men            NA           NA          NA
-##   women 0.003990219  0.004071121 0.003969048
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-<pre class="r"><code>oddsratio(tab1,rev=&quot;col&quot;)</code></pre>
-<pre><code>## $data
-##        opinion
-## gender  against favor Total
-##   women     191   309   500
-##   men       281   319   600
-##   Total     472   628  1100
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender   estimate     lower     upper
-##   women 1.0000000        NA        NA
-##   men   0.7020317 0.5510397 0.8934032
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   women          NA           NA          NA
-##   men   0.003990219  0.004071121 0.003969048
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-<pre class="r"><code>oddsratio(tab1,rev=&quot;both&quot;)</code></pre>
-<pre><code>## $data
-##        opinion
-## gender  against favor Total
-##   men       281   319   600
-##   women     191   309   500
-##   Total     472   628  1100
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender  estimate    lower    upper
-##   men   1.000000       NA       NA
-##   women 1.424397 1.119315 1.814751
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   men            NA           NA          NA
-##   women 0.003990219  0.004071121 0.003969048
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-</div>
-<div id="section-4" class="section level2">
 <h2>1:2</h2>
 <pre class="r"><code>m11 = 557
 m12 = 1835 - 557
@@ -916,7 +770,7 @@ cont_table2</code></pre>
 admitted_not2 &lt;- colSums(cont_table2)
 total2 &lt;- sum(cont_table2)
 
-percentages_matrix2 &lt;- (diag(1 / women_men) %*% cont_table2) * 100
+percentage_matrix2 &lt;- (diag(1 / women_men) %*% cont_table2) * 100
 
 
 
@@ -926,8 +780,13 @@ pearsonX2 &lt;- chisq.test(cont_table2,correct=FALSE)
 pearsonX2_statistic &lt;- pearsonX2$statistic
 pearsonX2_p &lt;- pearsonX2$p.value
 
-library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
-# summary(loglm(~gender+admission,cont_table2))%&gt;% knitr::kable()
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)</code></pre>
+<pre><code>## 
+## Attaching package: 'MASS'</code></pre>
+<pre><code>## The following object is masked from 'package:dplyr':
+## 
+##     select</code></pre>
+<pre class="r"><code># summary(loglm(~gender+admission,cont_table2))%&gt;% knitr::kable()
 summary(loglm(~gender+admission,cont_table2))</code></pre>
 <pre><code>## Formula:
 ## ~gender + admission
@@ -970,7 +829,25 @@ odds_ratio2statistic &lt;- oddsratio2$measure
 # oddsratio2$measure
 
 riskratio2 &lt;- riskratio(cont_table2,rev=&quot;both&quot;)  </code></pre>
-<pre class="r"><code># percentagematrix2 %&gt;% knitr::kable()</code></pre>
+<pre class="r"><code>percentage_matrix2 %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">admitted</th>
+<th align="right">not_admitted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">111.4000</td>
+<td align="right">255.6000</td>
+</tr>
+<tr class="even">
+<td align="right">199.6667</td>
+<td align="right">248.8333</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>gee2pearsonX2$tests %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1056,7 +933,12 @@ m22_tenth = round(m22/10)
 cont_table3 &lt;- as.table(rbind(c(m11_tenth, m12_tenth), c(m21_tenth, m22_tenth)))
 dimnames(cont_table3) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;), admission = c(&quot;admitted&quot;,&quot;not_admitted&quot;))
 
-# cont_table3 &lt;- matrix(
+cont_table3</code></pre>
+<pre><code>##        admission
+## gender  admitted not_admitted
+##   women       56          128
+##   men        120          149</code></pre>
+<pre class="r"><code># cont_table3 &lt;- matrix(
 #   c(m11_tenth, m12_tenth, m21_tenth, m22_tenth), # the data elements 
 #   nrow=2,              # number of rows 
 #   ncol=2,              # number of columns 
@@ -1066,17 +948,18 @@ dimnames(cont_table3) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;),
 women_men3 = rowSums(cont_table3)
 admitted_not3 = colSums(cont_table3)
 total3 = sum(cont_table3)
-percentages_matrix &lt;- (diag(1 / women_men3) %*% cont_table3) * 100
+percentage_matrix3 &lt;- (diag(1 / women_men3) %*% cont_table3) * 100
+
+#Calculate X2, G2 and p-values
+pearsonX2 &lt;- chisq.test(cont_table2,correct=FALSE)
+# pearsonX2
+pearsonX2_statistic &lt;- pearsonX2$statistic
+pearsonX2_p &lt;- pearsonX2$p.value
 
 
 #Calculate X2, G2 and p-values
-chisq.test(cont_table3,correct=FALSE)</code></pre>
-<pre><code>## 
-##  Pearson's Chi-squared test
-## 
-## data:  cont_table3
-## X-squared = 9.2409, df = 1, p-value = 0.002367</code></pre>
-<pre class="r"><code>library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+# chisq.test(cont_table3,correct=FALSE)
+# library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 loglm(~gender+admission,cont_table2)</code></pre>
 <pre><code>## Call:
 ## loglm(formula = ~gender + admission, data = cont_table2)
@@ -1085,64 +968,108 @@ loglm(~gender+admission,cont_table2)</code></pre>
 ##                       X^2 df P(&gt; X^2)
 ## Likelihood Ratio 93.44941  1        0
 ## Pearson          92.20528  1        0</code></pre>
-<pre class="r"><code>#------------------------------------------------------------------------------------------
+<pre class="r"><code>gee2pearsonX3 &lt;- summary(loglm(~gender+admission,cont_table3))
+
+#------------------------------------------------------------------------------------------
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio(cont_table3,rev=&quot;neither&quot;)</code></pre>
-<pre><code>## $data
-##        admission
-## gender  admitted not_admitted Total
-##   women       56          128   184
-##   men        120          149   269
-##   Total      176          277   453
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender   estimate     lower    upper
-##   women 1.0000000        NA       NA
-##   men   0.5444604 0.3648116 0.806568
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   women          NA           NA          NA
-##   men   0.002342045  0.002398862 0.002366671
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-<pre class="r"><code>riskratio(cont_table3,rev=&quot;neither&quot;)  </code></pre>
-<pre><code>## $data
-##        admission
-## gender  admitted not_admitted Total
-##   women       56          128   184
-##   men        120          149   269
-##   Total      176          277   453
-## 
-## $measure
-##        risk ratio with 95% C.I.
-## gender   estimate     lower     upper
-##   women 1.0000000        NA        NA
-##   men   0.7962361 0.6896932 0.9192375
-## 
-## $p.value
-##        two-sided
-## gender   midp.exact fisher.exact  chi.square
-##   women          NA           NA          NA
-##   men   0.002342045  0.002398862 0.002366671
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
-<pre class="r"><code># percentagematrix3 %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># gee2pearsonX3$tests %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># oddsratio3$measure %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># riskratio3$measure %&gt;% knitr::kable()</code></pre>
+oddsratio3 &lt;- oddsratio(cont_table3,rev=&quot;neither&quot;)
+riskratio3 &lt;- riskratio(cont_table3,rev=&quot;neither&quot;)  </code></pre>
+<pre class="r"><code>percentage_matrix3 %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">admitted</th>
+<th align="right">not_admitted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">30.43478</td>
+<td align="right">69.56522</td>
+</tr>
+<tr class="even">
+<td align="right">44.60967</td>
+<td align="right">55.39033</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>gee2pearsonX3$tests %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">X^2</th>
+<th align="right">df</th>
+<th align="right">P(&gt; X^2)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Likelihood Ratio</td>
+<td align="right">9.364274</td>
+<td align="right">1</td>
+<td align="right">0.0022126</td>
+</tr>
+<tr class="even">
+<td>Pearson</td>
+<td align="right">9.240912</td>
+<td align="right">1</td>
+<td align="right">0.0023667</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>oddsratio3$measure %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">estimate</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>women</td>
+<td align="right">1.0000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td>men</td>
+<td align="right">0.5444604</td>
+<td align="right">0.3648116</td>
+<td align="right">0.806568</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>riskratio3$measure %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">estimate</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>women</td>
+<td align="right">1.0000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td>men</td>
+<td align="right">0.7962361</td>
+<td align="right">0.6896932</td>
+<td align="right">0.9192375</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>m11_hundreth = round(m11/100)
 m12_hundreth = round(m12/100)
 m21_hundreth = round(m21/100)
@@ -1161,7 +1088,7 @@ dimnames(cont_table4) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;),
 women_men4 = rowSums(cont_table4)
 admitted_not4 = colSums(cont_table4)
 total4 = sum(cont_table4)
-percentages_matrix &lt;- (diag(1 / women_men4) %*% cont_table4) * 100
+percentage_matrix4 &lt;- (diag(1 / women_men4) %*% cont_table4) * 100
 
 
 #Calculate X2, G2 and p-values
@@ -1172,72 +1099,109 @@ chisq.test(cont_table4,correct=FALSE)</code></pre>
 ## data:  cont_table4
 ## X-squared = 0.77499, df = 1, p-value = 0.3787</code></pre>
 <pre class="r"><code>library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
-loglm(~gender+admission,cont_table4)</code></pre>
-<pre><code>## Call:
-## loglm(formula = ~gender + admission, data = cont_table4)
-## 
-## Statistics:
-##                        X^2 df  P(&gt; X^2)
-## Likelihood Ratio 0.7833632  1 0.3761145
-## Pearson          0.7749930  1 0.3786768</code></pre>
-<pre class="r"><code>#------------------------------------------------------------------------------------------
+# loglm(~gender+admission,cont_table4)
+
+#------------------------------------------------------------------------------------------
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio(cont_table4,rev=&quot;neither&quot;)</code></pre>
-<pre><code>## $data
-##        admission
-## gender  admitted not_admitted Total
-##   women        6           13    19
-##   men         12           15    27
-##   Total       18           28    46
-## 
-## $measure
-##        odds ratio with 95% C.I.
-## gender   estimate    lower    upper
-##   women 1.0000000       NA       NA
-##   men   0.5881692 0.160175 2.010974
-## 
-## $p.value
-##        two-sided
-## gender  midp.exact fisher.exact chi.square
-##   women         NA           NA         NA
-##   men    0.4016049    0.5407569  0.3786768
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
-<pre class="r"><code>riskratio(cont_table4,rev=&quot;neither&quot;)  </code></pre>
-<pre><code>## $data
-##        admission
-## gender  admitted not_admitted Total
-##   women        6           13    19
-##   men         12           15    27
-##   Total       18           28    46
-## 
-## $measure
-##        risk ratio with 95% C.I.
-## gender   estimate     lower    upper
-##   women 1.0000000        NA       NA
-##   men   0.8119658 0.5150874 1.279955
-## 
-## $p.value
-##        two-sided
-## gender  midp.exact fisher.exact chi.square
-##   women         NA           NA         NA
-##   men    0.4016049    0.5407569  0.3786768
-## 
-## $correction
-## [1] FALSE
-## 
-## attr(,&quot;method&quot;)
-## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
-<pre class="r"><code># percentagematrix4 %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># gee2pearsonX4$tests %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># oddsratio4$measure %&gt;% knitr::kable()</code></pre>
-<pre class="r"><code># riskratio4$measure %&gt;% knitr::kable()</code></pre>
+oddsratio4 &lt;- oddsratio(cont_table4,rev=&quot;neither&quot;)
+riskratio4 &lt;- riskratio(cont_table4,rev=&quot;neither&quot;)  
+gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
+<pre class="r"><code>percentage_matrix4 %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">admitted</th>
+<th align="right">not_admitted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">31.57895</td>
+<td align="right">68.42105</td>
+</tr>
+<tr class="even">
+<td align="right">44.44444</td>
+<td align="right">55.55556</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>gee2pearsonX4$tests %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">X^2</th>
+<th align="right">df</th>
+<th align="right">P(&gt; X^2)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Likelihood Ratio</td>
+<td align="right">0.7833632</td>
+<td align="right">1</td>
+<td align="right">0.3761145</td>
+</tr>
+<tr class="even">
+<td>Pearson</td>
+<td align="right">0.7749930</td>
+<td align="right">1</td>
+<td align="right">0.3786768</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>oddsratio4$measure %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">estimate</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>women</td>
+<td align="right">1.0000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td>men</td>
+<td align="right">0.5881692</td>
+<td align="right">0.160175</td>
+<td align="right">2.010974</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>riskratio4$measure %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">estimate</th>
+<th align="right">lower</th>
+<th align="right">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>women</td>
+<td align="right">1.0000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td>men</td>
+<td align="right">0.8119658</td>
+<td align="right">0.5150874</td>
+<td align="right">1.279955</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
