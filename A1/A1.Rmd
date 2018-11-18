@@ -386,13 +386,34 @@ odds_ratio2statistic
 oddsratio2$measure
 
 riskratio2 <- riskratio(cont_table2,rev="both")  
+
+
+
+
+
   
 ```
 
-`r percentagematrix2 %>% knitr::kable()`
-`r gee2pearsonX2$tests %>% knitr::kable()`
-`r oddsratio2$measure %>% knitr::kable()`
-`r riskratio2$measure %>% knitr::kable()`
+```{r}
+percentagematrix2 %>% knitr::kable()
+
+```
+
+```{r}
+gee2pearsonX2$tests %>% knitr::kable()
+```
+
+```{r}
+oddsratio2$measure %>% knitr::kable()
+
+```
+
+```{r}
+
+riskratio2$measure %>% knitr::kable()
+
+```
+
 
 DBBL KLLA att det blir rätt riskratio oddsratio 
 
@@ -433,10 +454,26 @@ oddsratio(cont_table3,rev="neither")
 riskratio(cont_table3,rev="neither")  
 ```
 
-`r percentagematrix3 %>% knitr::kable()`
-`r gee2pearsonX3$tests %>% knitr::kable()`
-`r oddsratio3$measure %>% knitr::kable()`
-`r riskratio3$measure %>% knitr::kable()`
+```{r}
+percentagematrix3 %>% knitr::kable()
+
+```
+
+```{r}
+gee2pearsonX3$tests %>% knitr::kable()
+```
+
+```{r}
+oddsratio3$measure %>% knitr::kable()
+
+```
+
+
+```{r}
+riskratio3$measure %>% knitr::kable()
+```
+
+
 
 ```{r}
 m11_hundreth = round(m11/100)
@@ -474,7 +511,22 @@ riskratio(cont_table4,rev="neither")
 
 ```
 
-`r percentagematrix4 %>% knitr::kable()`
-`r gee2pearsonX4$tests %>% knitr::kable()`
-`r oddsratio4$measure %>% knitr::kable()`
-`r riskratio4$measure %>% knitr::kable()`
+```{r}
+percentagematrix4 %>% knitr::kable()
+
+```
+
+```{r}
+gee2pearsonX4$tests %>% knitr::kable()
+
+```
+
+```{r}
+oddsratio4$measure %>% knitr::kable()
+```
+
+```{r}
+riskratio4$measure %>% knitr::kable()
+```
+
+
