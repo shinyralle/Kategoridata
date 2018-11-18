@@ -2,7 +2,7 @@
 title: "A1"
 author: "Magnus Brogie, Rahul Duggal"
 date: "12 November 2018"
-output: github_document
+# output: github_document
 ---
 
 
@@ -12,32 +12,40 @@ output: github_document
 
 ```{r }
 library(tidyverse)
+tab1<- as.table(rbind(c(309, 191), c(319, 281)))
+dimnames(tab1) <- list(gender = c("women", "men"),opinion = c("favor","against"))
+
 # install.packages("kableExtra")
 cont_table = matrix(
   c(309, 191, 319, 281), # the data elements 
   nrow=2,              # number of rows 
   ncol=2,              # number of columns 
   byrow = TRUE)  # fill matrix by rows 
-cont_table
+rownames(cont_table) <-  c("Women", "Men")
+colnames(cont_table) <-  c('In Favor','Against')
+cont_table %>% knitr::kable()
 
 women_men = rowSums(cont_table)
 favor_against = colSums(cont_table)
 total = sum(cont_table)
 
 # Calculates percentages by matrix multiplication
-(percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
+percentages_matrix <- (diag(1 / women_men) %*% cont_table) * 100
 colnames(percentages_matrix) <- c("In Favor", "Against")
 rownames(percentages_matrix) <- c("Women", "Men")
-percentages_matrix #  %>% knitr::kable()
+# percentages_matrix #  %>% knitr::kable()
 
 expected_matrix <- total * (diag(1 / women_men)  %*% cont_table) * (cont_table %*% diag(1 / favor_against))
-expected_matrix
-cont_table
+# expected_matrix
+# cont_table
 cont_minus_expected <- cont_table - expected_matrix
 cont_minus_expected_squared  <- cont_minus_expected * cont_minus_expected
 test_matrix <- cont_minus_expected_squared / expected_matrix
 chi_two_statistic <- sum(test_matrix)
-chi_two_statistic 
+test_chi_two_statistic <- chisq.test(tab1,correct=FALSE)
+test_chi_two_statistic <-  test_chi_two_statistic$statistic
+test_chi_two_statistic
+# chi_two_statistic 
 
 
 
@@ -46,16 +54,25 @@ chi_two_statistic
 Procent anger antal hundradelar och noteras med %. Vi kan beräkna hur många procent $kn$ är av $m$ genom att ställa upp $100 \times n/m$. Detta fungerar eftersom vår siffersystem är decimalt. Således blir andelen kvinnor som är för laglig abort i procent $$100 \times \frac{\text{antal kvinnor för laglig abort}}{\text{totalt antal kvinnor}}$$ och andelen kvinnor som är emot laglig abort i procent $$100 \times \frac{\text{antal kvinnor mot laglig abort}}{\text{totalt antal kvinnor}}$$, och motsvarande för män. Dessa beräknar ger oss följande tabell med procent:   `
 
 ```{r}
-(100 * percentages_matrix) %>% knitr::kable()
+percentages_matrix %>% knitr::kable()
 ```
 
+Motsvarande tabell som genereras av den till uppgiften bifogade testkoden är
 
-$$
-\begin{aligned} 
-G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\
-&=2n \sum_{i} \sum_{j}  \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right)
-\end{aligned}
-$$
+```{r}
+addmargins(tab1)
+addmargins(prop.table(tab1,1),2) 
+
+```
+
+Vilket är vår delad på hundra. Så våra uträkningar bör vara ok.
+
+<!-- $$ -->
+<!-- \begin{aligned}  -->
+<!-- G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \ln \left( \frac{\text{observed}}{\text{expected}} \right)\\ -->
+<!-- &=2n \sum_{i} \sum_{j}  \widehat{p}_{ij} \ln \left( \frac{\widehat{p}_{ij}}{p_{ij}} \right) -->
+<!-- \end{aligned} -->
+<!-- $$ -->
 
 
 ```{r geetwo}
@@ -64,48 +81,48 @@ cont_table = matrix(
   nrow=2,              # number of rows 
   ncol=2,              # number of columns 
   byrow = TRUE)  # fill matrix by rows 
-cont_table
+# cont_table
 
 women_men = rowSums(cont_table)
-women_men
-diag(1 / women_men)
+# women_men
+# diag(1 / women_men)
 favor_against = colSums(cont_table)
-favor_against
+# favor_against
 total = sum(cont_table)
 
-(percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
-colnames(percentages_matrix) <- c("In Favor", "Against")
-rownames(percentages_matrix) <- c("Women", "Men")
-percentages_matrix #  %>% knitr::kable()
+# (percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100
+# colnames(percentages_matrix) <- c("In Favor", "Against")
+# rownames(percentages_matrix) <- c("Women", "Men")
+# percentages_matrix #  %>% knitr::kable()
 
 expected_matrix <- total *  ((women_men / total)) %*%  t((favor_against / total))
 
 # shift.column(diag((favor_against / total)))
 
-(diag(1 / women_men)  %*% cont_table) 
-(cont_table %*% diag(1 / favor_against))
+# (diag(1 / women_men)  %*% cont_table) 
+# (cont_table %*% diag(1 / favor_against))
 
-total * (cont_table %*% diag(1 / favor_against)) * (diag(1 / women_men)  %*% cont_table)
+# total * (cont_table %*% diag(1 / favor_against)) * (diag(1 / women_men)  %*% cont_table)
 
-expected_matrix
-cont_table
-sum(expected_matrix)
+# expected_matrix
+# cont_table
+# sum(expected_matrix)
 obs_divided_by_expected <- cont_table / expected_matrix
-obs_divided_by_expected
-sapply(obs_divided_by_expected, log)
-matrix(sapply(obs_divided_by_expected, log), nrow = 2)
+# obs_divided_by_expected
+# sapply(obs_divided_by_expected, log)
+# matrix(sapply(obs_divided_by_expected, log), nrow = 2)
 log_obs_divided_by_expected <-  matrix(sapply(obs_divided_by_expected, log), nrow = 2)
-log_obs_divided_by_expected 
+# log_obs_divided_by_expected 
 obs_mult_by_log_obs_divided_by_expected <- cont_table * log_obs_divided_by_expected
-obs_mult_by_log_obs_divided_by_expected
-gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
+# obs_mult_by_log_obs_divided_by_expected
+# gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)
 gee_two <- 2 * (309*log(309/((628/1100)*(500/1100)*1100)) +
 191*log(191/((472/1100)*(500/1100)*1100)) +
 319*log(319/((628/1100)*(600/1100)*1100)) +
 281*log(281/((472/1100)*(600/1100)*1100)))
 
 
-(309/628)*(309/500)*1100
+# (309/628)*(309/500)*1100
 
 # f(x) <- function()
 
@@ -115,7 +132,7 @@ gee_two <- 2 * (309*log(309/((628/1100)*(500/1100)*1100)) +
 
 
 ## 2.
-Skiljer värdena i tabellen sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende?  Vi vill testa 
+Vi vill testa ifall att värdena i kontingnenstabellen skiljer sig signifikant från de som skulle förväntas ifall att kön och att vara för eller emot laglig abort vore oberoende?  Det vill säga vi vill testa nollhypotesen att
 $$
 \begin{aligned}
 H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
@@ -123,7 +140,7 @@ H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } 
 \end{aligned}
 $$
 
-Persons $X^{2}$ statiska kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är $\chi^{2}(f!!)$ FIXA! fördelad och beräknas enligt följande
+Pearsons $X^{2}$ statistika kan användas för att testa en hypotetisk fördelning i en kontingenstabell. Den är $\chi^{2}(f!!)$ FIXA! fördelad och beräknas enligt följande
 
 $$
 \begin{aligned}
@@ -141,6 +158,9 @@ $$
 $$
 där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Sannolikheten $\pi_{ij}$ kan skattas med hjälp av observationera i kontingens tabellen på följande vis $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $\n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och $n_{+j}$ motsvarande för kolumn $j$. Det ger oss att under nollhypotesen följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska med HUR MÅNGA FRIHETSGRADER `r chi_two_statistic` som vi kan jämföra med en tabell.  
 
+Motsvarande $X^{2}$ statistika som genereras av den till uppgiften bifogade testkoden är `r test_chi_two_statistic`.
+
+
 ```{r hupp}
 library(tidyverse)
 # install.packages("kableExtra")
@@ -154,7 +174,7 @@ cont_table = matrix(
   nrow=2,              # number of rows 
   ncol=2,              # number of columns 
   byrow = TRUE)  # fill matrix by rows 
-cont_table
+# cont_table
 
 women_men = rowSums(cont_table)
 favor_against = colSums(cont_table)
@@ -230,14 +250,22 @@ qnorm(0.975)
 
 hoger_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.975) * se_logstickprovsoddskvot)
 vanster_andpunkt <- exp(log(stickprovsoddskvot) + qnorm(0.025) * se_logstickprovsoddskvot)
-stickprovsoddskvot
+# stickprovsoddskvot
 
 ```
 
-standardfelet för $\widehat{\sigma}(\text{stickprovsoddskvot}) = 1.425085$  och att konfidensintervallet för blir (`r vanster_andpunkt`,`r hoger_andpunkt`). 
+standardfelet $\widehat{\sigma}(\text{log(stickprovsoddskvot)}) =$ `r se_logstickprovsoddskvot` och att konfidensintervallet för stickprovsoddskvoten blir (`r vanster_andpunkt`,`r hoger_andpunkt`). 
+
+Motsvarande estimat när man använder den till uppgiften bifogade testkoden blir:
+
+```{r}
+library('epitools') # the epitools package must be installed #
+oddsratio(tab1,rev="neither")$measure %>% knitr::kable()
 
 
+```
 
+vilket är tillräckligt nära våra beräkningar för att vi ska anta att det beror på avrundingar eller dylikt. 
 
 ## 4.
 
@@ -246,7 +274,7 @@ Vi vill estimera hur många gånger större sannolikheten är att en man är emo
 $$
 \text{ riskkvot } = \frac{\pi_{j = 2|i = 2}}{\pi_{j = 2|i = 1}}
 $$
-där $i$ är radindex och $j$ kolumn index. Denna estimerar vi med
+där $i$ är radindex och $j$ kolumn index i kontingenstabellen. Denna estimerar vi med
 
 $$
 \begin{aligned}
@@ -258,11 +286,12 @@ $$
 
 ```{r}
 stickprovsriskkvot <- (n22/ women_men[2])/(n12 / women_men[1])
-women_men[2]
-n22
+se_log_stickprovsriskkvot <- sqrt(((1 - (n22/ women_men[2]))/ women_men[2]) + ((1 - (n12 / women_men[1]))/ women_men[1]))
+# women_men[2]
+# n22
 ```
 
-och när vi räknar ut denna får vi att den blir `r stickprovsriskkvot`. Vi räknar med hjälp av formeln 3.5 på sida 71 ut standradfelet för stickprovsriskkvoten, nedan:
+och när vi räknar ut denna får vi att den blir `r stickprovsriskkvot`. Med andra ord är vårt estimat att män är `r stickprovsriskkvot` så sannolika att vara emot laglig abort som kvinnor.  Den naturliga logaritmen av detta värde blir `r se_log_stickprovsriskkvot`. Vi räknar med hjälp av formeln 3.5 på sida 71 ut standradfelet för den logaritmerade stickprovsriskkvoten nedan:
 
 $$
 \begin{aligned}
@@ -279,14 +308,7 @@ $$
 \end{aligned}
 $$
 
-
-
-```{r}
-se_log_stickprovsriskkvot <- sqrt(((1 - (n22/ women_men[2]))/ women_men[2]) + ((1 - (n12 / women_men[1]))/ women_men[1]))
-
-```
-
-och räknar vi ut denna genom att mata in värden så blir det `r se_log_stickprovsriskkvot`. Med andra ord är vårt estimat att män är `r se_log_stickprovsriskkvot` så sannolika att vara emot laglig abort som kvinnor. Vi kan sedan skapa konfidensintervallet för stickprovssriskkvoten med hjälp av formeln för ändamålet på sid  71 i kurslitteraturen
+Vi kan sedan skapa konfidensintervallet för stickprovssriskkvoten med hjälp av formeln för ändamålet på sid  71 i kurslitteraturen
 
 $$
 \log \left(
@@ -325,12 +347,48 @@ vanster_andpunkt2 <- exp(
 hoger_andpunkt2 <- exp(
   log((n22/ women_men[2])/(n12 / women_men[1])) + qnorm(0.975)*sqrt((1 - n22/women_men[2])/n22 + (1 - n12/women_men[1])/n12)
 )
-  
-(n22/ women_men[2])/(n12 / women_men[1]) 
+#   
+# (n22/ women_men[2])/(n12 / women_men[1]) 
+
+library('epitools') # the epitools package must be installed #
+oddsratio(tab1,rev="neither")
 
 ```
 
 (`r vanster_andpunkt2`, `r hoger_andpunkt2`) med konfidensgrad $0.05$. Vi kan notera att noll inte ligger på detta intervall. Således är riskkvoten signifikant skild från noll.
+
+Motsvarande estimat när man använder den till uppgiften bifogade testkoden blir:
+
+```{r}
+library('epitools') # the epitools package must be installed #
+oddsratio(tab1,rev="neither")$measure %>% knitr::kable()
+
+
+```
+
+## 5
+
+Vid jämförande av våra resultat med de som genereras av koden nedan finner vi att det är små skillnader här och var som förhoppningsvis kan förklaras av avrundning och inte av logiska fel i vår kod.
+
+```{r}
+# Generate a frequency table and calculate row percentage
+tab1<- as.table(rbind(c(309, 191), c(319, 281)))
+dimnames(tab1) <- list(gender = c("women", "men"),opinion = c("favor","against"))
+addmargins(tab1)
+addmargins(prop.table(tab1,1),2) # To get column percentages: addmargins(prop.table(tab1,2),1) #
+# Calculate X2, G2 and p-values
+chisq.test(tab1,correct=FALSE)
+library(MASS) # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...) #
+loglm(~gender+opinion,tab1)
+# Calculate risk/odds ratio and confidence interval
+library('epitools') # the epitools package must be installed #
+oddsratio(tab1,rev="neither")
+riskratio(tab1,rev="neither")
+# To get the intended odds/risk ratio, you may need to reverse the rows or columns.
+oddsratio(tab1,rev="row")
+oddsratio(tab1,rev="col")
+oddsratio(tab1,rev="both")
+```
 
 ## 1:2
 
@@ -363,17 +421,17 @@ percentages_matrix2 <- (diag(1 / women_men) %*% cont_table2) * 100
 
 #Calculate X2, G2 and p-values
 pearsonX2 <- chisq.test(cont_table2,correct=FALSE)
-pearsonX2
+# pearsonX2
 pearsonX2_statistic <- pearsonX2$statistic
 pearsonX2_p <- pearsonX2$p.value
 
 library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
-summary(loglm(~gender+admission,cont_table2))%>% knitr::kable()
+# summary(loglm(~gender+admission,cont_table2))%>% knitr::kable()
 summary(loglm(~gender+admission,cont_table2))
 gee2pearsonX2 <- summary(loglm(~gender+admission,cont_table2))
 gee2pearsonX2$tests
 
-gee2_statistic <- gee2$pearson
+# gee2_statistic <- gee2pearsonX2$tests
 
 #------------------------------------------------------------------------------------------
 
@@ -382,20 +440,14 @@ library(epitools)    # the epitools package must be installed #
 oddsratio2 <- oddsratio(cont_table2,rev="both")
 odds_ratio2statistic <- oddsratio2$measure
 
-odds_ratio2statistic
-oddsratio2$measure
+# odds_ratio2statistic
+# oddsratio2$measure
 
 riskratio2 <- riskratio(cont_table2,rev="both")  
-
-
-
-
-
-  
 ```
 
 ```{r}
-percentagematrix2 %>% knitr::kable()
+# percentagematrix2 %>% knitr::kable()
 
 ```
 
@@ -455,22 +507,22 @@ riskratio(cont_table3,rev="neither")
 ```
 
 ```{r}
-percentagematrix3 %>% knitr::kable()
+# percentagematrix3 %>% knitr::kable()
 
 ```
 
 ```{r}
-gee2pearsonX3$tests %>% knitr::kable()
+# gee2pearsonX3$tests %>% knitr::kable()
 ```
 
 ```{r}
-oddsratio3$measure %>% knitr::kable()
+# oddsratio3$measure %>% knitr::kable()
 
 ```
 
 
 ```{r}
-riskratio3$measure %>% knitr::kable()
+# riskratio3$measure %>% knitr::kable()
 ```
 
 
@@ -512,21 +564,23 @@ riskratio(cont_table4,rev="neither")
 ```
 
 ```{r}
-percentagematrix4 %>% knitr::kable()
+# percentagematrix4 %>% knitr::kable()
 
 ```
 
 ```{r}
-gee2pearsonX4$tests %>% knitr::kable()
+# gee2pearsonX4$tests %>% knitr::kable()
 
 ```
 
 ```{r}
-oddsratio4$measure %>% knitr::kable()
+# oddsratio4$measure %>% knitr::kable()
 ```
 
 ```{r}
-riskratio4$measure %>% knitr::kable()
+# riskratio4$measure %>% knitr::kable()
 ```
+
+
 
 
