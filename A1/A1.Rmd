@@ -397,9 +397,8 @@ m21 = 1198
 m22 = 2691 - 1198
 
 cont_table2 <- as.table(rbind(c(m11, m12), c(m21, m22)))
-cont_table2
 dimnames(cont_table2) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
-
+# cont_table2
 # cont_table2 <- matrix(
 #   c(m11, m12, m21, m22), # the data elements 
 #   nrow=2,              # number of rows 
@@ -407,7 +406,7 @@ dimnames(cont_table2) <- list(gender = c("women", "men"), admission = c("admitte
 #   byrow = TRUE)  # fill matrix by rows 
 # rownames(cont_table2) <- c('women', 'men')
 # colnames(cont_table2) <- c('admitted', 'not_admitted')
-cont_table2
+# cont_table2
 
 women_men2 <- rowSums(cont_table2)
 admitted_not2 <- colSums(cont_table2)
@@ -425,9 +424,9 @@ pearsonX2_p <- pearsonX2$p.value
 
 library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 # summary(loglm(~gender+admission,cont_table2))%>% knitr::kable()
-summary(loglm(~gender+admission,cont_table2))
+# summary(loglm(~gender+admission,cont_table2))
 gee2pearsonX2 <- summary(loglm(~gender+admission,cont_table2))
-gee2pearsonX2$tests
+# gee2pearsonX2$tests
 
 # gee2_statistic <- gee2pearsonX2$tests
 
@@ -435,13 +434,15 @@ gee2pearsonX2$tests
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio2 <- oddsratio(cont_table2,rev="neither")
+oddsratio2 <- oddsratio(cont_table2,rev="columns")
+# oddsratio2
 odds_ratio2statistic <- oddsratio2$measure
 
 # odds_ratio2statistic
 # oddsratio2$measure
 
-riskratio2 <- riskratio(cont_table2,rev="neither")  
+riskratio2 <- riskratio(cont_table2, rev="columns")
+riskratio2
 ```
 
 ```{r}
@@ -478,7 +479,7 @@ m22_tenth = round(m22/10)
 cont_table3 <- as.table(rbind(c(m11_tenth, m12_tenth), c(m21_tenth, m22_tenth)))
 dimnames(cont_table3) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
 
-cont_table3
+# cont_table3
 
 # cont_table3 <- matrix(
 #   c(m11_tenth, m12_tenth, m21_tenth, m22_tenth), # the data elements 
@@ -502,7 +503,7 @@ pearsonX2_p <- pearsonX2$p.value
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table3,correct=FALSE)
 # library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
-loglm(~gender+admission,cont_table2)
+# loglm(~gender+admission,cont_table2)
 
 gee2pearsonX3 <- summary(loglm(~gender+admission,cont_table3))
 
@@ -510,8 +511,8 @@ gee2pearsonX3 <- summary(loglm(~gender+admission,cont_table3))
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio3 <- oddsratio(cont_table3,rev="neither")
-riskratio3 <- riskratio(cont_table3,rev="neither")  
+oddsratio3 <- oddsratio(cont_table3,rev="columns")
+riskratio3 <- riskratio(cont_table3,rev="columns")
 ```
 
 ```{r}
@@ -528,12 +529,9 @@ oddsratio3$measure %>% knitr::kable()
 
 ```
 
-
 ```{r}
 riskratio3$measure %>% knitr::kable()
 ```
-
-
 
 ```{r}
 m11_hundreth = round(m11/100)
@@ -558,7 +556,7 @@ percentage_matrix4 <- (diag(1 / women_men4) %*% cont_table4) * 100
 
 
 #Calculate X2, G2 and p-values
-chisq.test(cont_table4,correct=FALSE)
+# chisq.test(cont_table4,correct=FALSE)
 library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 # loglm(~gender+admission,cont_table4)
 
@@ -566,8 +564,8 @@ library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools 
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio4 <- oddsratio(cont_table4,rev="neither")
-riskratio4 <- riskratio(cont_table4,rev="neither")  
+oddsratio4 <- oddsratio(cont_table4,rev="columns")
+riskratio4 <- riskratio(cont_table4,rev="columns")  
 gee2pearsonX4 <- summary(loglm(~gender+admission,cont_table4))
 ```
 

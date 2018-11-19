@@ -319,12 +319,12 @@ $(document).ready(function () {
 <div id="hur-manga-percent-av-man-respektive-kvinnor-ar-for-och-emot-laglig-abort" class="section level2">
 <h2>1. Hur många percent av män respektive kvinnor är för och emot laglig abort?</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages -------------------------------------------------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
-<pre><code>## v ggplot2 3.0.0     v purrr   0.2.5
-## v tibble  1.4.2     v dplyr   0.7.6
-## v tidyr   0.8.1     v stringr 1.3.1
+<pre><code>## -- Attaching packages ---------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.7
+## v tidyr   0.8.2     v stringr 1.3.1
 ## v readr   1.1.1     v forcats 0.3.0</code></pre>
-<pre><code>## -- Conflicts ----------------------------------------------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>tab1&lt;- as.table(rbind(c(309, 191), c(319, 281)))
@@ -748,12 +748,8 @@ m21 = 1198
 m22 = 2691 - 1198
 
 cont_table2 &lt;- as.table(rbind(c(m11, m12), c(m21, m22)))
-cont_table2</code></pre>
-<pre><code>##      A    B
-## A  557 1278
-## B 1198 1493</code></pre>
-<pre class="r"><code>dimnames(cont_table2) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;), admission = c(&quot;admitted&quot;,&quot;not_admitted&quot;))
-
+dimnames(cont_table2) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;), admission = c(&quot;admitted&quot;,&quot;not_admitted&quot;))
+# cont_table2
 # cont_table2 &lt;- matrix(
 #   c(m11, m12, m21, m22), # the data elements 
 #   nrow=2,              # number of rows 
@@ -761,12 +757,9 @@ cont_table2</code></pre>
 #   byrow = TRUE)  # fill matrix by rows 
 # rownames(cont_table2) &lt;- c('women', 'men')
 # colnames(cont_table2) &lt;- c('admitted', 'not_admitted')
-cont_table2</code></pre>
-<pre><code>##        admission
-## gender  admitted not_admitted
-##   women      557         1278
-##   men       1198         1493</code></pre>
-<pre class="r"><code>women_men2 &lt;- rowSums(cont_table2)
+# cont_table2
+
+women_men2 &lt;- rowSums(cont_table2)
 admitted_not2 &lt;- colSums(cont_table2)
 total2 &lt;- sum(cont_table2)
 
@@ -787,48 +780,49 @@ library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools 
 ## 
 ##     select</code></pre>
 <pre class="r"><code># summary(loglm(~gender+admission,cont_table2))%&gt;% knitr::kable()
-summary(loglm(~gender+admission,cont_table2))</code></pre>
-<pre><code>## Formula:
-## ~gender + admission
-## attr(,&quot;variables&quot;)
-## list(gender, admission)
-## attr(,&quot;factors&quot;)
-##           gender admission
-## gender         1         0
-## admission      0         1
-## attr(,&quot;term.labels&quot;)
-## [1] &quot;gender&quot;    &quot;admission&quot;
-## attr(,&quot;order&quot;)
-## [1] 1 1
-## attr(,&quot;intercept&quot;)
-## [1] 1
-## attr(,&quot;response&quot;)
-## [1] 0
-## attr(,&quot;.Environment&quot;)
-## &lt;environment: R_GlobalEnv&gt;
-## 
-## Statistics:
-##                       X^2 df P(&gt; X^2)
-## Likelihood Ratio 93.44941  1        0
-## Pearson          92.20528  1        0</code></pre>
-<pre class="r"><code>gee2pearsonX2 &lt;- summary(loglm(~gender+admission,cont_table2))
-gee2pearsonX2$tests</code></pre>
-<pre><code>##                       X^2 df P(&gt; X^2)
-## Likelihood Ratio 93.44941  1        0
-## Pearson          92.20528  1        0</code></pre>
-<pre class="r"><code># gee2_statistic &lt;- gee2pearsonX2$tests
+# summary(loglm(~gender+admission,cont_table2))
+gee2pearsonX2 &lt;- summary(loglm(~gender+admission,cont_table2))
+# gee2pearsonX2$tests
+
+# gee2_statistic &lt;- gee2pearsonX2$tests
 
 #------------------------------------------------------------------------------------------
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio2 &lt;- oddsratio(cont_table2,rev=&quot;both&quot;)
+oddsratio2 &lt;- oddsratio(cont_table2,rev=&quot;columns&quot;)
+# oddsratio2
 odds_ratio2statistic &lt;- oddsratio2$measure
 
 # odds_ratio2statistic
 # oddsratio2$measure
 
-riskratio2 &lt;- riskratio(cont_table2,rev=&quot;both&quot;)  </code></pre>
+riskratio2 &lt;- riskratio(cont_table2, rev=&quot;columns&quot;)
+riskratio2</code></pre>
+<pre><code>## $data
+##        admission
+## gender  not_admitted admitted Total
+##   women         1278      557  1835
+##   men           1493     1198  2691
+##   Total         2771     1755  4526
+## 
+## $measure
+##        risk ratio with 95% C.I.
+## gender  estimate   lower    upper
+##   women 1.000000      NA       NA
+##   men   1.466642 1.35235 1.590592
+## 
+## $p.value
+##        two-sided
+## gender  midp.exact fisher.exact chi.square
+##   women         NA           NA         NA
+##   men            0 4.835903e-22 7.8136e-22
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,&quot;method&quot;)
+## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
 <pre class="r"><code>percentage_matrix2 %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -885,16 +879,16 @@ riskratio2 &lt;- riskratio(cont_table2,rev=&quot;both&quot;)  </code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td>men</td>
-<td align="right">1.0000000</td>
+<td>women</td>
+<td align="right">1.00000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
-<td>women</td>
-<td align="right">0.5432854</td>
-<td align="right">0.4791433</td>
-<td align="right">0.6155486</td>
+<td>men</td>
+<td align="right">1.84063</td>
+<td align="right">1.624567</td>
+<td align="right">2.087058</td>
 </tr>
 </tbody>
 </table>
@@ -910,16 +904,16 @@ riskratio2 &lt;- riskratio(cont_table2,rev=&quot;both&quot;)  </code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td>men</td>
-<td align="right">1.0000000</td>
+<td>women</td>
+<td align="right">1.000000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
-<td>women</td>
-<td align="right">0.6818298</td>
-<td align="right">0.6286966</td>
-<td align="right">0.7394536</td>
+<td>men</td>
+<td align="right">1.466642</td>
+<td align="right">1.35235</td>
+<td align="right">1.590592</td>
 </tr>
 </tbody>
 </table>
@@ -933,12 +927,9 @@ m22_tenth = round(m22/10)
 cont_table3 &lt;- as.table(rbind(c(m11_tenth, m12_tenth), c(m21_tenth, m22_tenth)))
 dimnames(cont_table3) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;), admission = c(&quot;admitted&quot;,&quot;not_admitted&quot;))
 
-cont_table3</code></pre>
-<pre><code>##        admission
-## gender  admitted not_admitted
-##   women       56          128
-##   men        120          149</code></pre>
-<pre class="r"><code># cont_table3 &lt;- matrix(
+# cont_table3
+
+# cont_table3 &lt;- matrix(
 #   c(m11_tenth, m12_tenth, m21_tenth, m22_tenth), # the data elements 
 #   nrow=2,              # number of rows 
 #   ncol=2,              # number of columns 
@@ -960,22 +951,16 @@ pearsonX2_p &lt;- pearsonX2$p.value
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table3,correct=FALSE)
 # library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
-loglm(~gender+admission,cont_table2)</code></pre>
-<pre><code>## Call:
-## loglm(formula = ~gender + admission, data = cont_table2)
-## 
-## Statistics:
-##                       X^2 df P(&gt; X^2)
-## Likelihood Ratio 93.44941  1        0
-## Pearson          92.20528  1        0</code></pre>
-<pre class="r"><code>gee2pearsonX3 &lt;- summary(loglm(~gender+admission,cont_table3))
+# loglm(~gender+admission,cont_table2)
+
+gee2pearsonX3 &lt;- summary(loglm(~gender+admission,cont_table3))
 
 #------------------------------------------------------------------------------------------
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio3 &lt;- oddsratio(cont_table3,rev=&quot;neither&quot;)
-riskratio3 &lt;- riskratio(cont_table3,rev=&quot;neither&quot;)  </code></pre>
+oddsratio3 &lt;- oddsratio(cont_table3,rev=&quot;columns&quot;)
+riskratio3 &lt;- riskratio(cont_table3,rev=&quot;columns&quot;)</code></pre>
 <pre class="r"><code>percentage_matrix3 %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1033,15 +1018,15 @@ riskratio3 &lt;- riskratio(cont_table3,rev=&quot;neither&quot;)  </code></pre>
 <tbody>
 <tr class="odd">
 <td>women</td>
-<td align="right">1.0000000</td>
+<td align="right">1.000000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td>men</td>
-<td align="right">0.5444604</td>
-<td align="right">0.3648116</td>
-<td align="right">0.806568</td>
+<td align="right">1.836632</td>
+<td align="right">1.239821</td>
+<td align="right">2.741141</td>
 </tr>
 </tbody>
 </table>
@@ -1058,15 +1043,15 @@ riskratio3 &lt;- riskratio(cont_table3,rev=&quot;neither&quot;)  </code></pre>
 <tbody>
 <tr class="odd">
 <td>women</td>
-<td align="right">1.0000000</td>
+<td align="right">1.000000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td>men</td>
-<td align="right">0.7962361</td>
-<td align="right">0.6896932</td>
-<td align="right">0.9192375</td>
+<td align="right">1.465746</td>
+<td align="right">1.134883</td>
+<td align="right">1.893069</td>
 </tr>
 </tbody>
 </table>
@@ -1092,21 +1077,16 @@ percentage_matrix4 &lt;- (diag(1 / women_men4) %*% cont_table4) * 100
 
 
 #Calculate X2, G2 and p-values
-chisq.test(cont_table4,correct=FALSE)</code></pre>
-<pre><code>## 
-##  Pearson's Chi-squared test
-## 
-## data:  cont_table4
-## X-squared = 0.77499, df = 1, p-value = 0.3787</code></pre>
-<pre class="r"><code>library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+# chisq.test(cont_table4,correct=FALSE)
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 # loglm(~gender+admission,cont_table4)
 
 #------------------------------------------------------------------------------------------
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio4 &lt;- oddsratio(cont_table4,rev=&quot;neither&quot;)
-riskratio4 &lt;- riskratio(cont_table4,rev=&quot;neither&quot;)  
+oddsratio4 &lt;- oddsratio(cont_table4,rev=&quot;columns&quot;)
+riskratio4 &lt;- riskratio(cont_table4,rev=&quot;columns&quot;)  
 gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
 <pre class="r"><code>percentage_matrix4 %&gt;% knitr::kable()</code></pre>
 <table>
@@ -1165,15 +1145,15 @@ gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
 <tbody>
 <tr class="odd">
 <td>women</td>
-<td align="right">1.0000000</td>
+<td align="right">1.000000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td>men</td>
-<td align="right">0.5881692</td>
-<td align="right">0.160175</td>
-<td align="right">2.010974</td>
+<td align="right">1.700141</td>
+<td align="right">0.4972715</td>
+<td align="right">6.243172</td>
 </tr>
 </tbody>
 </table>
@@ -1190,15 +1170,15 @@ gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
 <tbody>
 <tr class="odd">
 <td>women</td>
-<td align="right">1.0000000</td>
+<td align="right">1.000000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td>men</td>
-<td align="right">0.8119658</td>
-<td align="right">0.5150874</td>
-<td align="right">1.279955</td>
+<td align="right">1.407407</td>
+<td align="right">0.6420765</td>
+<td align="right">3.084984</td>
 </tr>
 </tbody>
 </table>
