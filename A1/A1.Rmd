@@ -435,13 +435,13 @@ gee2pearsonX2$tests
 
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
-oddsratio2 <- oddsratio(cont_table2,rev="both")
+oddsratio2 <- oddsratio(cont_table2,rev="neither")
 odds_ratio2statistic <- oddsratio2$measure
 
 # odds_ratio2statistic
 # oddsratio2$measure
 
-riskratio2 <- riskratio(cont_table2,rev="both")  
+riskratio2 <- riskratio(cont_table2,rev="neither")  
 ```
 
 ```{r}
