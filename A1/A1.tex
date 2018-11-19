@@ -1,0 +1,1335 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={A1},
+            pdfauthor={Magnus Brogie, Rahul Duggal},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{A1}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Magnus Brogie, Rahul Duggal}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{12 November 2018}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{assignment-1}{%
+\section{Assignment 1}\label{assignment-1}}
+
+\hypertarget{hur-manga-percent-av-man-respektive-kvinnor-ar-for-och-emot-laglig-abort}{%
+\subsection{1. Hur många percent av män respektive kvinnor är för och
+emot laglig
+abort?}\label{hur-manga-percent-av-man-respektive-kvinnor-ar-for-och-emot-laglig-abort}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages ---------------------------------- tidyverse 1.2.1 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.1.0     v purrr   0.2.5
+## v tibble  1.4.2     v dplyr   0.7.7
+## v tidyr   0.8.2     v stringr 1.3.1
+## v readr   1.1.1     v forcats 0.3.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tab1<-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{309}\NormalTok{, }\DecValTok{191}\NormalTok{), }\KeywordTok{c}\NormalTok{(}\DecValTok{319}\NormalTok{, }\DecValTok{281}\NormalTok{)))}
+\KeywordTok{dimnames}\NormalTok{(tab1) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{gender =} \KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{),}\DataTypeTok{opinion =} \KeywordTok{c}\NormalTok{(}\StringTok{"favor"}\NormalTok{,}\StringTok{"against"}\NormalTok{))}
+
+\CommentTok{# install.packages("kableExtra")}
+\NormalTok{cont_table =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}
+  \KeywordTok{c}\NormalTok{(}\DecValTok{309}\NormalTok{, }\DecValTok{191}\NormalTok{, }\DecValTok{319}\NormalTok{, }\DecValTok{281}\NormalTok{), }\CommentTok{# the data elements }
+  \DataTypeTok{nrow=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of rows }
+  \DataTypeTok{ncol=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of columns }
+  \DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)  }\CommentTok{# fill matrix by rows }
+\KeywordTok{rownames}\NormalTok{(cont_table) <-}\StringTok{  }\KeywordTok{c}\NormalTok{(}\StringTok{"Women"}\NormalTok{, }\StringTok{"Men"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(cont_table) <-}\StringTok{  }\KeywordTok{c}\NormalTok{(}\StringTok{'In Favor'}\NormalTok{,}\StringTok{'Against'}\NormalTok{)}
+\NormalTok{cont_table }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule
+& In Favor & Against\tabularnewline
+\midrule
+\endhead
+Women & 309 & 191\tabularnewline
+Men & 319 & 281\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{women_men =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table)}
+\NormalTok{favor_against =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table)}
+\NormalTok{total =}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table)}
+
+\CommentTok{# Calculates percentages by matrix multiplication}
+\NormalTok{percentages_matrix <-}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{women_men) }\OperatorTok{%*%}\StringTok{ }\NormalTok{cont_table) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{colnames}\NormalTok{(percentages_matrix) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"In Favor"}\NormalTok{, }\StringTok{"Against"}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(percentages_matrix) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Women"}\NormalTok{, }\StringTok{"Men"}\NormalTok{)}
+\CommentTok{# percentages_matrix #  %>% knitr::kable()}
+
+\NormalTok{expected_matrix <-}\StringTok{ }\NormalTok{total }\OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{women_men)  }\OperatorTok{%*%}\StringTok{ }\NormalTok{cont_table) }\OperatorTok{*}\StringTok{ }\NormalTok{(cont_table }\OperatorTok{%*%}\StringTok{ }\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{favor_against))}
+\CommentTok{# expected_matrix}
+\CommentTok{# cont_table}
+\NormalTok{cont_minus_expected <-}\StringTok{ }\NormalTok{cont_table }\OperatorTok{-}\StringTok{ }\NormalTok{expected_matrix}
+\NormalTok{cont_minus_expected_squared  <-}\StringTok{ }\NormalTok{cont_minus_expected }\OperatorTok{*}\StringTok{ }\NormalTok{cont_minus_expected}
+\NormalTok{test_matrix <-}\StringTok{ }\NormalTok{cont_minus_expected_squared }\OperatorTok{/}\StringTok{ }\NormalTok{expected_matrix}
+\NormalTok{chi_two_statistic <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(test_matrix)}
+\NormalTok{test_chi_two_statistic <-}\StringTok{ }\KeywordTok{chisq.test}\NormalTok{(tab1,}\DataTypeTok{correct=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{test_chi_two_statistic <-}\StringTok{  }\NormalTok{test_chi_two_statistic}\OperatorTok{$}\NormalTok{statistic}
+\NormalTok{test_chi_two_statistic}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## X-squared 
+##  8.297921
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# chi_two_statistic }
+\end{Highlighting}
+\end{Shaded}
+
+Procent anger antal hundradelar och noteras med \%. Vi kan beräkna hur
+många procent \(kn\) är av \(m\) genom att ställa upp
+\(100 \times n/m\). Detta fungerar eftersom vår siffersystem är
+decimalt. Således blir andelen kvinnor som är för laglig abort i procent
+\[100 \times \frac{\text{antal kvinnor för laglig abort}}{\text{totalt antal kvinnor}}\]
+och andelen kvinnor som är emot laglig abort i procent
+\[100 \times \frac{\text{antal kvinnor mot laglig abort}}{\text{totalt antal kvinnor}}\],
+och motsvarande för män. Dessa beräknar ger oss följande tabell med
+procent: `
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentages_matrix }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule
+& In Favor & Against\tabularnewline
+\midrule
+\endhead
+Women & 61.80000 & 38.20000\tabularnewline
+Men & 53.16667 & 46.83333\tabularnewline
+\bottomrule
+\end{longtable}
+
+Motsvarande tabell som genereras av den till uppgiften bifogade
+testkoden är
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{addmargins}\NormalTok{(tab1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        opinion
+## gender  favor against  Sum
+##   women   309     191  500
+##   men     319     281  600
+##   Sum     628     472 1100
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{addmargins}\NormalTok{(}\KeywordTok{prop.table}\NormalTok{(tab1,}\DecValTok{1}\NormalTok{),}\DecValTok{2}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        opinion
+## gender      favor   against       Sum
+##   women 0.6180000 0.3820000 1.0000000
+##   men   0.5316667 0.4683333 1.0000000
+\end{verbatim}
+
+Vilket är vår delad på hundra. Så våra uträkningar bör vara ok.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont_table =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}
+  \KeywordTok{c}\NormalTok{(}\DecValTok{309}\NormalTok{, }\DecValTok{191}\NormalTok{, }\DecValTok{319}\NormalTok{, }\DecValTok{281}\NormalTok{), }\CommentTok{# the data elements }
+  \DataTypeTok{nrow=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of rows }
+  \DataTypeTok{ncol=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of columns }
+  \DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)  }\CommentTok{# fill matrix by rows }
+\CommentTok{# cont_table}
+
+\NormalTok{women_men =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table)}
+\CommentTok{# women_men}
+\CommentTok{# diag(1 / women_men)}
+\NormalTok{favor_against =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table)}
+\CommentTok{# favor_against}
+\NormalTok{total =}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table)}
+
+\CommentTok{# (percentages_matrix <- diag(1 / women_men) %*% cont_table) * 100}
+\CommentTok{# colnames(percentages_matrix) <- c("In Favor", "Against")}
+\CommentTok{# rownames(percentages_matrix) <- c("Women", "Men")}
+\CommentTok{# percentages_matrix #  %>% knitr::kable()}
+
+\NormalTok{expected_matrix <-}\StringTok{ }\NormalTok{total }\OperatorTok{*}\StringTok{  }\NormalTok{((women_men }\OperatorTok{/}\StringTok{ }\NormalTok{total)) }\OperatorTok{%*%}\StringTok{  }\KeywordTok{t}\NormalTok{((favor_against }\OperatorTok{/}\StringTok{ }\NormalTok{total))}
+
+\CommentTok{# shift.column(diag((favor_against / total)))}
+
+\CommentTok{# (diag(1 / women_men)  %*% cont_table) }
+\CommentTok{# (cont_table %*% diag(1 / favor_against))}
+
+\CommentTok{# total * (cont_table %*% diag(1 / favor_against)) * (diag(1 / women_men)  %*% cont_table)}
+
+\CommentTok{# expected_matrix}
+\CommentTok{# cont_table}
+\CommentTok{# sum(expected_matrix)}
+\NormalTok{obs_divided_by_expected <-}\StringTok{ }\NormalTok{cont_table }\OperatorTok{/}\StringTok{ }\NormalTok{expected_matrix}
+\CommentTok{# obs_divided_by_expected}
+\CommentTok{# sapply(obs_divided_by_expected, log)}
+\CommentTok{# matrix(sapply(obs_divided_by_expected, log), nrow = 2)}
+\NormalTok{log_obs_divided_by_expected <-}\StringTok{  }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(obs_divided_by_expected, log), }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{)}
+\CommentTok{# log_obs_divided_by_expected }
+\NormalTok{obs_mult_by_log_obs_divided_by_expected <-}\StringTok{ }\NormalTok{cont_table }\OperatorTok{*}\StringTok{ }\NormalTok{log_obs_divided_by_expected}
+\CommentTok{# obs_mult_by_log_obs_divided_by_expected}
+\CommentTok{# gee_two <- 2 * sum(obs_mult_by_log_obs_divided_by_expected)}
+\NormalTok{gee_two <-}\StringTok{ }\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{(}\DecValTok{309}\OperatorTok{*}\KeywordTok{log}\NormalTok{(}\DecValTok{309}\OperatorTok{/}\NormalTok{((}\DecValTok{628}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\NormalTok{(}\DecValTok{500}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\DecValTok{1100}\NormalTok{)) }\OperatorTok{+}
+\DecValTok{191}\OperatorTok{*}\KeywordTok{log}\NormalTok{(}\DecValTok{191}\OperatorTok{/}\NormalTok{((}\DecValTok{472}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\NormalTok{(}\DecValTok{500}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\DecValTok{1100}\NormalTok{)) }\OperatorTok{+}
+\DecValTok{319}\OperatorTok{*}\KeywordTok{log}\NormalTok{(}\DecValTok{319}\OperatorTok{/}\NormalTok{((}\DecValTok{628}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\NormalTok{(}\DecValTok{600}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\DecValTok{1100}\NormalTok{)) }\OperatorTok{+}
+\DecValTok{281}\OperatorTok{*}\KeywordTok{log}\NormalTok{(}\DecValTok{281}\OperatorTok{/}\NormalTok{((}\DecValTok{472}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\NormalTok{(}\DecValTok{600}\OperatorTok{/}\DecValTok{1100}\NormalTok{)}\OperatorTok{*}\DecValTok{1100}\NormalTok{)))}
+
+
+\CommentTok{# (309/628)*(309/500)*1100}
+
+\CommentTok{# f(x) <- function()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{section}{%
+\subsection{2.}\label{section}}
+
+Vi vill testa ifall att värdena i kontingnenstabellen skiljer sig
+signifikant från de som skulle förväntas ifall att kön och att vara för
+eller emot laglig abort vore oberoende? Det vill säga vi vill testa
+nollhypotesen att \[
+\begin{aligned}
+H_{0}: & \text{ den förklaranden variabeln är oberoende av responsvariablen } \Leftrightarrow \\
+       &\pi_{ij} = \pi_{i\circ}\pi_{\circ j} \text{ för alla $i$ och $j$}
+\end{aligned}
+\]
+
+Pearsons \(X^{2}\) statistika kan användas för att testa en hypotetisk
+fördelning i en kontingenstabell. Den är \(\chi^{2}(f!!)\) FIXA!
+fördelad och beräknas enligt följande
+
+\[
+\begin{aligned}
+\chi^{2} &= \sum_{i} \sum_{j}  \frac{(\text{observed} - \text{expected})^{2}}{\text{expected}}\\
+         &= \sum_{i} \sum_{j}  \frac{(x_{ij} - e_{ij})^{2}}{e_{ij}}
+\end{aligned}
+\]
+
+där ``expected'', ``\(e_{ij}\)'', är de förväntade värdena i
+kontingenstabellen på rad \(i\) och kolumn \(j\) under hypotesen och
+``observed'', ``\(x_{ij}\)'', är motsvarande observerade värde i
+kontingenstabellen.
+
+Under antagandet att antal som är för respektive emot laglig abort är
+oberoende av kön gäller att \[
+\pi_{ij} = \pi_{i\circ}\pi_{\circ j}
+\] där \(\pi_{ij}\) anger sannoliketen att en observation hamnar på rad
+\(i\) och kolumn \(j\), \(\pi_{i\circ}\) anger sannolikheten att en
+observation hamnar på rad \(i\) och \(\pi_{\circ j}\) anger
+sannolikheten att en observation hamnar på kolumn \(j\). Sannolikheten
+\(\pi_{ij}\) kan skattas med hjälp av observationera i kontingens
+tabellen på följande vis
+\[\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}\], där \(\n_{tot}\) anger
+det totala antalet observationer. Vi kan även skatta sannolikheten att
+en observation hamnar i rad \(i\) med
+\(\widehat{\pi}_{i\circ} = \frac{n_{i+}}{n_{tot}}\), där \(n_{i+}\)
+anger summan av alla observationer på rad \(i\) och \(n_{+j}\)
+motsvarande för kolumn \(j\). Det ger oss att under nollhypotesen
+följande skattningar av de förväntade värdena
+\(\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}\).
+Dessa uträkningar ger oss vår chitvå statiska med HUR MÅNGA
+FRIHETSGRADER 8.2979214 som vi kan jämföra med en tabell.
+
+Motsvarande \(X^{2}\) statistika som genereras av den till uppgiften
+bifogade testkoden är 8.2979214.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\CommentTok{# install.packages("kableExtra")}
+\NormalTok{n11 <-}\StringTok{ }\DecValTok{309}
+\NormalTok{n12 <-}\StringTok{ }\DecValTok{191}
+\NormalTok{n21 <-}\StringTok{ }\DecValTok{319}
+\NormalTok{n22 <-}\StringTok{ }\DecValTok{281}
+
+\NormalTok{cont_table =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}
+  \KeywordTok{c}\NormalTok{(}\DecValTok{309}\NormalTok{, }\DecValTok{191}\NormalTok{, }\DecValTok{319}\NormalTok{, }\DecValTok{281}\NormalTok{), }\CommentTok{# the data elements }
+  \DataTypeTok{nrow=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of rows }
+  \DataTypeTok{ncol=}\DecValTok{2}\NormalTok{,              }\CommentTok{# number of columns }
+  \DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)  }\CommentTok{# fill matrix by rows }
+\CommentTok{# cont_table}
+
+\NormalTok{women_men =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table)}
+\NormalTok{favor_against =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table)}
+\NormalTok{total =}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table)}
+
+\NormalTok{stickprovsoddskvot <-}\StringTok{ }\NormalTok{(n22 }\OperatorTok{*}\StringTok{ }\NormalTok{n11)}\OperatorTok{/}\NormalTok{(n12 }\OperatorTok{*}\StringTok{ }\NormalTok{n21)}
+
+
+\CommentTok{# mapply(cont_table, f())}
+\end{Highlighting}
+\end{Shaded}
+
+Vi kan även testa \(H_{0}\) med hjälp av \(G^{2}\) statistikan, som
+beräknas som följer
+
+\[
+\begin{aligned} 
+G^{2} &= 2 \sum_{i} \sum_{j} \text{ observed } \times \log \left( 
+\frac{\text{observed}}{\text{expected}} 
+\right)\\
+&=2 \sum_{i} \sum_{j}  x_{ij} \log 
+\left( 
+\frac{x_{ij}}{e_{ij}} 
+\right)
+\end{aligned}
+\]
+
+Vid inmatning av värdena från den aktuella kontingenstabellen evalueras
+\(G^{2}\) till 8.3223196. Den \(G^{2}\)-statistikan är VAD!? fördelad
+med HUR MÅNGA FRIHETSGRADER? frihetsgrader. Sannolikheten att få de
+observerade värdena under nollhypotesen är VAD? BEHöVERGöRAS!!!.
+
+\hypertarget{section-1}{%
+\subsection{3.}\label{section-1}}
+
+Oddsen att en man är emot laglig abort ges av
+
+\[
+\frac{
+\text{ sannolikheten att en man är emot laglig abort }
+}{
+\text{ sannolikheten att en man är för laglig abort }
+}.
+\]
+
+Det vill säga oddsen anger hur många gånger sannolikare det är att en
+man är emot laglig abort än att den är för laglig abort.
+
+Vi vill med hjälp av de observerade värdena estimera den odds-kvot som
+anger hur många gånger större oddsen att en man är emot laglig abort,
+denoterad \(\Omega_{m}\), än oddsen att en kvinna är det, denoterad
+\(\Omega_{k}\). Det vill säga vi vill estimera oddskvoten
+
+\[ \begin{aligned} 
+\text{ oddskvot } &= \frac{\Omega_{m}}{\Omega_{k}} \\ 
+&= \frac{\text{ odds att en man är emot laglig abort }}{ \text{ odds att en kvinna är emot laglig abort }}\\ 
+&= \frac{\text{ (sannolikheten att en man är emot laglig abort)/(sannolikheten att en man är för laglig abort) }}{ \text{ (sannolikheten att en kvinna är emot laglig abort)/(sannolikheten att en kvinna är för laglig abort) }}\\
+&= \frac{\pi_{j = 2| i = 2}/(1-\pi_{j = 2| i = 2})}{\pi_{j = 2 | i = 1}/(1-\pi_{j = 2 | i = 1})}
+\end{aligned}\] med stickprovsoddskvoten
+
+\[ \begin{aligned} 
+\text{ stickprovsoddskvot } &= \frac{\text{ stickprovsodds att en man är emot laglig abort }}{ \text{ stickprovsodds att en kvinna är emot laglig abort }}\\ &=\frac{\widehat{\Omega}_{m}}{\widehat{\Omega}_{k}}\\
+&= \frac{\text{ (stickprovssannolikheten att en man är emot laglig abort)/(stickprovssannolikheten att en man är för laglig abort) }}{ \text{ (stickprovssannolikheten att en kvinna är emot laglig abort)/(stickprovssannolikheten att en kvinna är för laglig abort) }}\\
+&= \frac{\widehat{\pi}_{j = 2| i = 2}/(1-\widehat{\pi}_{j = 2| i = 2})}{\widehat{\pi}_{j = 1 | i = 2}/(1-\widehat{\pi}_{j = 1 | i = 2})}\\
+&= \frac{(n_{22}/n_{2+})/(n_{21}/n_{2+})}{(n_{12}/n_{1+})/(n_{11}/n_{1+})}\\
+&= \frac{n_{22}n_{11}}{n_{12}n_{21}}
+\end{aligned}\]
+
+Gör vi dessa uträkningar så får vi stickprovsoddskvoten 1.4250849. Med
+andra ord är vårt estimat är oddset att en man är emot laglig abort
+1.4250849 så högt som oddset att en kvinna är det. Under antagande att
+enkätdatan är multinomialfördelad gäller att standardefelet för
+oddskvoten kan estimeras med
+
+\[ \widehat{\sigma}(\log (\text{stickprovsoddskvot})) = \sqrt{\left(\frac{1}{n_{11}} + \frac{1}{n_{12}} + \frac{1}{n_{21}} + \frac{1}{n_{12}}\right)}\]
+
+Se ekvation 3.1 på sid 70 i kurslitteraturen. Vidare, gäller per
+normaliteten av \(\log \widehat{\theta}\) för stora stickprov, att
+
+\[ \log \widehat{\theta} \pm z_{0.025} \widehat{\sigma}(\log \widehat{\theta}).\]
+ger oss ett konfidensintervall med konfidensgrad \(0.05\). Se sid. 71 i
+kurslitteraturen, och vi kan exponentiera ändpunkterna av detta
+intervall för att få ett konfidensintervall för \[\widehat{\theta}\].
+När vi genomför beräkningarna enligt ovan får vi att
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{se_logstickprovsoddskvot =}\StringTok{ }\KeywordTok{sqrt}\NormalTok{((}\DecValTok{1}\OperatorTok{/}\NormalTok{n11)}\OperatorTok{+}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{n12)}\OperatorTok{+}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{n21)}\OperatorTok{+}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{n22)) }
+
+\KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.959964
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hoger_andpunkt <-}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\KeywordTok{log}\NormalTok{(stickprovsoddskvot) }\OperatorTok{+}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{se_logstickprovsoddskvot)}
+\NormalTok{vanster_andpunkt <-}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\KeywordTok{log}\NormalTok{(stickprovsoddskvot) }\OperatorTok{+}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{se_logstickprovsoddskvot)}
+\CommentTok{# stickprovsoddskvot}
+\end{Highlighting}
+\end{Shaded}
+
+standardfelet \(\widehat{\sigma}(\text{log(stickprovsoddskvot)}) =\)
+0.1231477 och att konfidensintervallet för stickprovsoddskvoten blir
+(1.1194823,1.8141128).
+
+Motsvarande estimat när man använder den till uppgiften bifogade
+testkoden blir:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{'epitools'}\NormalTok{) }\CommentTok{# the epitools package must be installed #}
+\KeywordTok{oddsratio}\NormalTok{(tab1,}\DataTypeTok{rev=}\StringTok{"neither"}\NormalTok{)}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.424397 & 1.119315 & 1.814751\tabularnewline
+\bottomrule
+\end{longtable}
+
+vilket är tillräckligt nära våra beräkningar för att vi ska anta att det
+beror på avrundingar eller dylikt.
+
+\hypertarget{section-2}{%
+\subsection{4.}\label{section-2}}
+
+Vi vill estimera hur många gånger större sannolikheten är att en man är
+emot laglig abort än att en kvinna är emot laglig abort. Det vill säga
+vi vill estimera riskkvoten, vilken är kvoten mellan sannoliketen att en
+man är emot laglig abort och sannolikheten att en kvinna är emot laglig
+abort. Denna ges av
+
+\[
+\text{ riskkvot } = \frac{\pi_{j = 2|i = 2}}{\pi_{j = 2|i = 1}}
+\] där \(i\) är radindex och \(j\) kolumn index i kontingenstabellen.
+Denna estimerar vi med
+
+\[
+\begin{aligned}
+\text{ stickprovsriskkvot } &= \frac{\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}\\
+&= \frac{(n_{22}/n_{2+})}{(n_{12}/n_{1+})}
+\end{aligned}
+\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stickprovsriskkvot <-}\StringTok{ }\NormalTok{(n22}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{(n12 }\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{1}\NormalTok{])}
+\NormalTok{se_log_stickprovsriskkvot <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(((}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(n22}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{2}\NormalTok{]))}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{2}\NormalTok{]) }\OperatorTok{+}\StringTok{ }\NormalTok{((}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(n12 }\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{1}\NormalTok{]))}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{1}\NormalTok{]))}
+\CommentTok{# women_men[2]}
+\CommentTok{# n22}
+\end{Highlighting}
+\end{Shaded}
+
+och när vi räknar ut denna får vi att den blir 1.2260035. Med andra ord
+är vårt estimat att män är 1.2260035 så sannolika att vara emot laglig
+abort som kvinnor. Den naturliga logaritmen av detta värde blir
+0.0460664. Vi räknar med hjälp av formeln 3.5 på sida 71 ut
+standradfelet för den logaritmerade stickprovsriskkvoten nedan:
+
+\[
+\begin{aligned}
+\widehat{\sigma}\left(
+\log \left(
+\frac{\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}
+\right) 
+\right) &= \sqrt{
+\frac{1 - \widehat{\pi}_{j = 2|i = 2}}{n_{22}} + \frac{1 - \widehat{\pi}_{j = 2|i = 1}}{n_{12}}
+}\\
+&= \sqrt{
+\frac{1 - n_{22}/n_{2+} }{n_{22}} + \frac{1 - n_{12}/n_{1+}}{n_{12}}
+}
+\end{aligned}
+\]
+
+Vi kan sedan skapa konfidensintervallet för stickprovssriskkvoten med
+hjälp av formeln för ändamålet på sid 71 i kurslitteraturen
+
+\[
+\log \left(
+\frac{
+\widehat{\pi}_{j = 2|i = 2}}{
+\widehat{\pi}_{j = 2|i = 1}}
+\right)
+\pm z_{0.025}\widehat{\sigma}
+\left(
+\log \left(
+\frac{
+\widehat{\pi}_{j = 2|i = 2}}{\widehat{\pi}_{j = 2|i = 1}}
+\right)
+\right)
+\].
+
+Det vill säga
+
+\[
+\log \left(
+\frac{
+n_{22}/ n_{2+} }{
+n_{12} / n_{1+}}
+\right)
+\pm z_{0.025}\sqrt{
+\frac{1 - n_{22}/n_{2+} }{n_{22}} + \frac{1 - n_{12}/n_{1+}}{n_{12}}
+}
+\]. Vilket ger oss konfidensintervallet
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vanster_andpunkt2 <-}\StringTok{ }\KeywordTok{exp}\NormalTok{(}
+  \KeywordTok{log}\NormalTok{((n22}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{(n12 }\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{1}\NormalTok{])) }\OperatorTok{+}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{((}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{n22}\OperatorTok{/}\NormalTok{women_men[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{n22 }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{n12}\OperatorTok{/}\NormalTok{women_men[}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\NormalTok{n12)}
+\NormalTok{)}
+
+\NormalTok{hoger_andpunkt2 <-}\StringTok{ }\KeywordTok{exp}\NormalTok{(}
+  \KeywordTok{log}\NormalTok{((n22}\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{(n12 }\OperatorTok{/}\StringTok{ }\NormalTok{women_men[}\DecValTok{1}\NormalTok{])) }\OperatorTok{+}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{((}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{n22}\OperatorTok{/}\NormalTok{women_men[}\DecValTok{2}\NormalTok{])}\OperatorTok{/}\NormalTok{n22 }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{n12}\OperatorTok{/}\NormalTok{women_men[}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\NormalTok{n12)}
+\NormalTok{)}
+\CommentTok{#   }
+\CommentTok{# (n22/ women_men[2])/(n12 / women_men[1]) }
+
+\KeywordTok{library}\NormalTok{(}\StringTok{'epitools'}\NormalTok{) }\CommentTok{# the epitools package must be installed #}
+\KeywordTok{oddsratio}\NormalTok{(tab1,}\DataTypeTok{rev=}\StringTok{"neither"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $data
+##        opinion
+## gender  favor against Total
+##   women   309     191   500
+##   men     319     281   600
+##   Total   628     472  1100
+## 
+## $measure
+##        odds ratio with 95% C.I.
+## gender  estimate    lower    upper
+##   women 1.000000       NA       NA
+##   men   1.424397 1.119315 1.814751
+## 
+## $p.value
+##        two-sided
+## gender   midp.exact fisher.exact  chi.square
+##   women          NA           NA          NA
+##   men   0.003990219  0.004071121 0.003969048
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,"method")
+## [1] "median-unbiased estimate & mid-p exact CI"
+\end{verbatim}
+
+(1.065465, 1.4107311) med konfidensgrad \(0.05\). Vi kan notera att noll
+inte ligger på detta intervall. Således är riskkvoten signifikant skild
+från noll.
+
+Motsvarande estimat när man använder den till uppgiften bifogade
+testkoden blir:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{'epitools'}\NormalTok{) }\CommentTok{# the epitools package must be installed #}
+\KeywordTok{riskratio}\NormalTok{(tab1,}\DataTypeTok{rev=}\StringTok{"neither"}\NormalTok{)}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.226004 & 1.065465 & 1.410731\tabularnewline
+\bottomrule
+\end{longtable}
+
+Vid jämförande av våra resultat med dessa finner vi att det är små
+skillnader som förhoppningsvis kan förklaras av avrundningar eller
+motsvarande.
+
+\hypertarget{section-3}{%
+\section{1.2}\label{section-3}}
+
+\hypertarget{odividerad-kontingenstabellen}{%
+\subsection{Odividerad
+kontingenstabellen}\label{odividerad-kontingenstabellen}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m11 =}\StringTok{ }\DecValTok{557}
+\NormalTok{m12 =}\StringTok{ }\DecValTok{1835} \OperatorTok{-}\StringTok{ }\DecValTok{557}
+\NormalTok{m21 =}\StringTok{ }\DecValTok{1198}
+\NormalTok{m22 =}\StringTok{ }\DecValTok{2691} \OperatorTok{-}\StringTok{ }\DecValTok{1198}
+
+\NormalTok{cont_table2 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(m11, m12), }\KeywordTok{c}\NormalTok{(m21, m22)))}
+\KeywordTok{dimnames}\NormalTok{(cont_table2) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{gender =} \KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{), }\DataTypeTok{admission =} \KeywordTok{c}\NormalTok{(}\StringTok{"admitted"}\NormalTok{,}\StringTok{"not_admitted"}\NormalTok{))}
+\CommentTok{# cont_table2}
+\CommentTok{# cont_table2 <- matrix(}
+\CommentTok{#   c(m11, m12, m21, m22), # the data elements }
+\CommentTok{#   nrow=2,              # number of rows }
+\CommentTok{#   ncol=2,              # number of columns }
+\CommentTok{#   byrow = TRUE)  # fill matrix by rows }
+\CommentTok{# rownames(cont_table2) <- c('women', 'men')}
+\CommentTok{# colnames(cont_table2) <- c('admitted', 'not_admitted')}
+\CommentTok{# cont_table2}
+
+\NormalTok{women_men2 <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table2)}
+\NormalTok{admitted_not2 <-}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table2)}
+\NormalTok{total2 <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table2)}
+
+\NormalTok{percentage_matrix2 <-}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{women_men2) }\OperatorTok{%*%}\StringTok{ }\NormalTok{cont_table2) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{rownames}\NormalTok{(percentage_matrix2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{)}
+
+
+\CommentTok{#Calculate X2, G2 and p-values}
+\NormalTok{pearsonX2 <-}\StringTok{ }\KeywordTok{chisq.test}\NormalTok{(cont_table2,}\DataTypeTok{correct=}\OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# pearsonX2}
+\NormalTok{pearsonX2_statistic <-}\StringTok{ }\NormalTok{pearsonX2}\OperatorTok{$}\NormalTok{statistic}
+\NormalTok{pearsonX2_p <-}\StringTok{ }\NormalTok{pearsonX2}\OperatorTok{$}\NormalTok{p.value}
+
+\KeywordTok{library}\NormalTok{(MASS)     }\CommentTok{# the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'MASS'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# summary(loglm(~gender+admission,cont_table2))%>% knitr::kable()}
+\CommentTok{# summary(loglm(~gender+admission,cont_table2))}
+\NormalTok{gee2pearsonX2 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\KeywordTok{loglm}\NormalTok{(}\OperatorTok{~}\NormalTok{gender}\OperatorTok{+}\NormalTok{admission,cont_table2))}
+\CommentTok{# gee2pearsonX2$tests}
+
+\CommentTok{# gee2_statistic <- gee2pearsonX2$tests}
+
+\CommentTok{#------------------------------------------------------------------------------------------}
+
+\CommentTok{#Calculate risk/odds ratio and confidence interval}
+\KeywordTok{library}\NormalTok{(epitools)    }\CommentTok{# the epitools package must be installed #}
+\NormalTok{oddsratio2 <-}\StringTok{ }\KeywordTok{oddsratio}\NormalTok{(cont_table2,}\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)}
+\NormalTok{oddsratio2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $data
+##        admission
+## gender  not_admitted admitted Total
+##   women         1278      557  1835
+##   men           1493     1198  2691
+##   Total         2771     1755  4526
+## 
+## $measure
+##        odds ratio with 95% C.I.
+## gender  estimate    lower    upper
+##   women  1.00000       NA       NA
+##   men    1.84063 1.624567 2.087058
+## 
+## $p.value
+##        two-sided
+## gender  midp.exact fisher.exact chi.square
+##   women         NA           NA         NA
+##   men            0 4.835903e-22 7.8136e-22
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,"method")
+## [1] "median-unbiased estimate & mid-p exact CI"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{odds_ratio2statistic <-}\StringTok{ }\NormalTok{oddsratio2}\OperatorTok{$}\NormalTok{measure}
+
+\CommentTok{# odds_ratio2statistic}
+\CommentTok{# oddsratio2$measure}
+
+\NormalTok{riskratio2 <-}\StringTok{ }\KeywordTok{riskratio}\NormalTok{(cont_table2, }\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)}
+\NormalTok{riskratio2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $data
+##        admission
+## gender  not_admitted admitted Total
+##   women         1278      557  1835
+##   men           1493     1198  2691
+##   Total         2771     1755  4526
+## 
+## $measure
+##        risk ratio with 95% C.I.
+## gender  estimate   lower    upper
+##   women 1.000000      NA       NA
+##   men   1.466642 1.35235 1.590592
+## 
+## $p.value
+##        two-sided
+## gender  midp.exact fisher.exact chi.square
+##   women         NA           NA         NA
+##   men            0 4.835903e-22 7.8136e-22
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,"method")
+## [1] "Unconditional MLE & normal approximation (Wald) CI"
+\end{verbatim}
+
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så
+blev \(45 \%\) av männen och \(30 \%\) av kvinnorna antagna.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentage_matrix2 }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule
+& admitted & not\_admitted\tabularnewline
+\midrule
+\endhead
+women & 30.35422 & 69.64578\tabularnewline
+men & 44.51877 & 55.48123\tabularnewline
+\bottomrule
+\end{longtable}
+
+Både likelihood ratio testet av oberoende med \(G^{2}\) statistikan och
+Pearsons \(X^{2}\)-test av oberoende låter oss avfärda nollhypotesen att
+variablerna är oberoende med de flesta vanligt förekommande
+signifikanströsklar.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gee2pearsonX2}\OperatorTok{$}\NormalTok{tests }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& X\^{}2 & df & P(\textgreater{} X\^{}2)\tabularnewline
+\midrule
+\endhead
+Likelihood Ratio & 93.44941 & 1 & 0\tabularnewline
+Pearson & 92.20528 & 1 & 0\tabularnewline
+\bottomrule
+\end{longtable}
+
+Under nollhypotesen att variablerna är oberoende är populations
+oddskvoten
+\[\frac{\text{ oddsen att en man blir antagen }}{\text{ oddsen att en kvinna blir antagen }} = 1\].
+I tabellen nedan framgår det att oddset att en man blir antagen
+estimeras till \(1.84\) gånger så högt som att en kvinna blir det av
+stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad
+\(.05\) som inte innefattar ett. Det vill säga denna stickprovs kvot är
+signifikant ettskild.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oddsratio2}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.00000 & NA & NA\tabularnewline
+men & 1.84063 & 1.624567 & 2.087058\tabularnewline
+\bottomrule
+\end{longtable}
+
+Under nollhypotesen att variablerna är oberoende gäller motsvarande
+förhållande för riskkvoten:
+\[\frac{\text{ sannolikheten att en man blir antagen }}{\text{ sannolikheten att en kvinna blir antagen }} = 1\].
+I tabellen nedan estimeras av stickprovsriskkvoten sannolikheten att en
+man blir antagen till avrundat \(1.47\) gånger så hög som att en kvinna
+blir det, med ett konfidensintervall med konfidensgrad \(.05\) som inte
+innefattar ett. Det vill säga denna stickprovskvot är signifikant
+ettskild.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{riskratio2}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.466642 & 1.35235 & 1.590592\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{kontingenstabellen-delad-med-10}{%
+\subsection{Kontingenstabellen delad med
+10}\label{kontingenstabellen-delad-med-10}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m11_tenth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m11}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{m12_tenth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m12}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{m21_tenth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m21}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{m22_tenth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m22}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+
+
+\NormalTok{cont_table3 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(m11_tenth, m12_tenth), }\KeywordTok{c}\NormalTok{(m21_tenth, m22_tenth)))}
+\KeywordTok{dimnames}\NormalTok{(cont_table3) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{gender =} \KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{), }\DataTypeTok{admission =} \KeywordTok{c}\NormalTok{(}\StringTok{"admitted"}\NormalTok{,}\StringTok{"not_admitted"}\NormalTok{))}
+
+\CommentTok{# cont_table3}
+
+\CommentTok{# cont_table3 <- matrix(}
+\CommentTok{#   c(m11_tenth, m12_tenth, m21_tenth, m22_tenth), # the data elements }
+\CommentTok{#   nrow=2,              # number of rows }
+\CommentTok{#   ncol=2,              # number of columns }
+\CommentTok{#   byrow = TRUE)  # fill matrix by rows }
+\CommentTok{# cont_table}
+
+\NormalTok{women_men3 =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table3)}
+\NormalTok{admitted_not3 =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table3)}
+\NormalTok{total3 =}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table3)}
+\NormalTok{percentage_matrix3 <-}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{women_men3) }\OperatorTok{%*%}\StringTok{ }\NormalTok{cont_table3) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{rownames}\NormalTok{(percentage_matrix3) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{)}
+\CommentTok{#Calculate X2, G2 and p-values}
+\NormalTok{pearsonX2 <-}\StringTok{ }\KeywordTok{chisq.test}\NormalTok{(cont_table2,}\DataTypeTok{correct=}\OtherTok{FALSE}\NormalTok{)}
+\CommentTok{# pearsonX2}
+\NormalTok{pearsonX2_statistic <-}\StringTok{ }\NormalTok{pearsonX2}\OperatorTok{$}\NormalTok{statistic}
+\NormalTok{pearsonX2_p <-}\StringTok{ }\NormalTok{pearsonX2}\OperatorTok{$}\NormalTok{p.value}
+
+
+\CommentTok{#Calculate X2, G2 and p-values}
+\CommentTok{# chisq.test(cont_table3,correct=FALSE)}
+\KeywordTok{library}\NormalTok{(MASS)     }\CommentTok{# the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)}
+\CommentTok{# loglm(~gender+admission,cont_table2)}
+
+\NormalTok{gee2pearsonX3 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\KeywordTok{loglm}\NormalTok{(}\OperatorTok{~}\NormalTok{gender}\OperatorTok{+}\NormalTok{admission,cont_table3))}
+
+\CommentTok{#------------------------------------------------------------------------------------------}
+
+\CommentTok{#Calculate risk/odds ratio and confidence interval}
+\KeywordTok{library}\NormalTok{(epitools)    }\CommentTok{# the epitools package must be installed #}
+\NormalTok{oddsratio3 <-}\StringTok{ }\KeywordTok{oddsratio}\NormalTok{(cont_table3,}\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)}
+\NormalTok{riskratio3 <-}\StringTok{ }\KeywordTok{riskratio}\NormalTok{(cont_table3,}\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så
+blev \(45 \%\) av männen och \(30 \%\) av kvinnorna antagna. Om dessa
+siffror påverkats något så är det avrundningen av kvoterna och inte av
+divideringen av antalet observationer.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentage_matrix3 }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule
+& admitted & not\_admitted\tabularnewline
+\midrule
+\endhead
+women & 30.43478 & 69.56522\tabularnewline
+men & 44.60967 & 55.39033\tabularnewline
+\bottomrule
+\end{longtable}
+
+Både likelihood ratio testet av oberoende med \(G^{2}\) statistikan och
+Pearsons \(X^{2}\)-test av oberoende låter oss avfärda nollhypotesen att
+variablerna är oberoende med säg \(.05\) i signifikanströskel. Dock kan
+vi se att statistikorna har ungefär dividerats med tio jämfört med det
+odividerade fallet.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gee2pearsonX3}\OperatorTok{$}\NormalTok{tests }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& X\^{}2 & df & P(\textgreater{} X\^{}2)\tabularnewline
+\midrule
+\endhead
+Likelihood Ratio & 9.364274 & 1 & 0.0022126\tabularnewline
+Pearson & 9.240912 & 1 & 0.0023667\tabularnewline
+\bottomrule
+\end{longtable}
+
+I tabellen nedan framgår det att oddset att en man blir antagen
+estimeras till \(1.84\) gånger så högt som att en kvinna blir det av
+stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad
+\(.05\) som inte innefattar ett. Det vill säga denna stickrprovskvot är
+signifikant ettskild. Dock har jämfört med det odividerade fallet
+konfidensintervallet blivit ungefär \(1\) enhet längre.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oddsratio3}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.836632 & 1.239821 & 2.741141\tabularnewline
+\bottomrule
+\end{longtable}
+
+I tabellen nedan framgår det att sannolikheten att en man blir antagen
+estimeras till avrundat \(1.47\) gånger så hög som att en kvinna blir
+det av stickprovsriskkvoten, med ett konfidensintervall med
+konfidensgrad \(.05\) som inte innefattar ett. Det vill säga denna
+stickprovskvot är signifikant ettskild. Dock har jämfört med det
+odividerade fallet konfidensintervallet blivit ungefär \(0.5\) enhet
+längre.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{riskratio3}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.465746 & 1.134883 & 1.893069\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{kontingenstabellen-delad-med-100}{%
+\subsection{Kontingenstabellen delad med
+100}\label{kontingenstabellen-delad-med-100}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m11_hundreth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m11}\OperatorTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{m12_hundreth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m12}\OperatorTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{m21_hundreth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m21}\OperatorTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{m22_hundreth =}\StringTok{ }\KeywordTok{round}\NormalTok{(m22}\OperatorTok{/}\DecValTok{100}\NormalTok{)}
+
+\NormalTok{cont_table4 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(m11_hundreth, m12_hundreth), }\KeywordTok{c}\NormalTok{(m21_hundreth, m22_hundreth)))}
+\KeywordTok{dimnames}\NormalTok{(cont_table4) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{gender =} \KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{), }\DataTypeTok{admission =} \KeywordTok{c}\NormalTok{(}\StringTok{"admitted"}\NormalTok{,}\StringTok{"not_admitted"}\NormalTok{))}
+
+
+\NormalTok{cont_table4}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        admission
+## gender  admitted not_admitted
+##   women        6           13
+##   men         12           15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# cont_table4 <- matrix(}
+\CommentTok{#   c(m11_hundreth, m12_hundreth, m21_hundreth, m22_hundreth), # the data elements }
+\CommentTok{#   nrow=2,              # number of rows }
+\CommentTok{#   ncol=2,              # number of columns }
+\CommentTok{#   byrow = TRUE)  # fill matrix by rows }
+\CommentTok{# cont_table}
+
+\NormalTok{women_men4 =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(cont_table4)}
+\NormalTok{admitted_not4 =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(cont_table4)}
+\NormalTok{total4 =}\StringTok{ }\KeywordTok{sum}\NormalTok{(cont_table4)}
+\NormalTok{percentage_matrix4 <-}\StringTok{ }\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{women_men4) }\OperatorTok{%*%}\StringTok{ }\NormalTok{cont_table4) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\KeywordTok{rownames}\NormalTok{(percentage_matrix4) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"women"}\NormalTok{, }\StringTok{"men"}\NormalTok{)}
+
+\CommentTok{#Calculate X2, G2 and p-values}
+\CommentTok{# chisq.test(cont_table4,correct=FALSE)}
+\KeywordTok{library}\NormalTok{(MASS)     }\CommentTok{# the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)}
+\CommentTok{# loglm(~gender+admission,cont_table4)}
+
+\CommentTok{#------------------------------------------------------------------------------------------}
+
+\CommentTok{#Calculate risk/odds ratio and confidence interval}
+\KeywordTok{library}\NormalTok{(epitools)    }\CommentTok{# the epitools package must be installed #}
+\NormalTok{oddsratio4 <-}\StringTok{ }\KeywordTok{oddsratio}\NormalTok{(cont_table4,}\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)}
+\NormalTok{riskratio4 <-}\StringTok{ }\KeywordTok{riskratio}\NormalTok{(cont_table4,}\DataTypeTok{rev=}\StringTok{"columns"}\NormalTok{)  }
+\NormalTok{gee2pearsonX4 <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\KeywordTok{loglm}\NormalTok{(}\OperatorTok{~}\NormalTok{gender}\OperatorTok{+}\NormalTok{admission,cont_table4))}
+\end{Highlighting}
+\end{Shaded}
+
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så
+blev \(44 \%\) av männen och \(31 \%\) av kvinnorna antagna.
+Skillnaderna här mot de andra två fallen beror enbart på avrudningen.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{percentage_matrix4 }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrr@{}}
+\toprule
+& admitted & not\_admitted\tabularnewline
+\midrule
+\endhead
+women & 31.57895 & 68.42105\tabularnewline
+men & 44.44444 & 55.55556\tabularnewline
+\bottomrule
+\end{longtable}
+
+Både likelihood ratio testet av oberoende med \(G^{2}\) statistikan och
+Pearsons \(X^{2}\)-test av oberoende låter oss inte längre avfärda
+nollhypotesen att variablerna är oberoende med någon rimlig
+signifikanströskel. De har krympt med samma magnitud som antalet
+observationer.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gee2pearsonX4}\OperatorTok{$}\NormalTok{tests }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& X\^{}2 & df & P(\textgreater{} X\^{}2)\tabularnewline
+\midrule
+\endhead
+Likelihood Ratio & 0.7833632 & 1 & 0.3761145\tabularnewline
+Pearson & 0.7749930 & 1 & 0.3786768\tabularnewline
+\bottomrule
+\end{longtable}
+
+Nu ser vi även i tabellerna nedan oddskvots- och riskkvotsestimaten ut
+att ha påverkats av minskningen av antalet observationer, men det måste
+vara avrundningen som spökar eftersom proportionera mellan de olika
+cellerna i kontingenstabellen inte rimligen kan påverkas av
+divideringen. Dock har konfidensintervallen för estimaten växt, vilket
+är väntat, och de omfattar nu ett, så inte heller dessa kan sägas vara
+signifikanta.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oddsratio4}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.700141 & 0.4972715 & 6.243172\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{riskratio4}\OperatorTok{$}\NormalTok{measure }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+& estimate & lower & upper\tabularnewline
+\midrule
+\endhead
+women & 1.000000 & NA & NA\tabularnewline
+men & 1.407407 & 0.6420765 & 3.084984\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{section-4}{%
+\subsection{2.3}\label{section-4}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{populationsoddskvot <-}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{)}\OperatorTok{/}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{))}\OperatorTok{/}\NormalTok{((}\FloatTok{0.5}\NormalTok{)}\OperatorTok{/}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Vi såg i föregående deluppgift att det räcker med drygt \(10\)
+observationer per ruta för att få en signifikanta oddskvoter. Vi räknar
+varje gång en balanserad tärning rullar ett jämt resultat som en
+framgång och alla andra resultat som ett misslyckande. Denna sanna
+oddskvoten för att lyckas mellan en balanserad tresidig tärning och en
+balansread sexsidiga tärningen är 0.5. När vi rullar en sexsidig tärning
+tjugo gånger och niosidig tärning tjugo gånger får vi
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sex_sidor_udda =}\StringTok{ }\DecValTok{10}
+\NormalTok{sex_sidor_jamnt =}\StringTok{ }\DecValTok{10}
+\NormalTok{tre_sidor_udda =}\StringTok{ }\DecValTok{10}
+\NormalTok{tre_sidor_jamnt =}\StringTok{ }\DecValTok{10}
+
+\NormalTok{tarningstabell <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{rbind}\NormalTok{(}\KeywordTok{c}\NormalTok{(sex_sidor_udda, sex_sidor_jamnt), }\KeywordTok{c}\NormalTok{(tre_sidor_udda, tre_sidor_jamnt)))}
+
+\KeywordTok{dimnames}\NormalTok{(tarningstabell) <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{tarning =} \KeywordTok{c}\NormalTok{(}\StringTok{"sexsidig"}\NormalTok{, }\StringTok{"tresidig"}\NormalTok{), }\DataTypeTok{kast =} \KeywordTok{c}\NormalTok{(}\StringTok{"udda"}\NormalTok{,}\StringTok{"jämnt"}\NormalTok{))}
+
+
+\NormalTok{tarningsoddskvot <-}\StringTok{ }\KeywordTok{oddsratio}\NormalTok{(tarningstabell)}
+
+\NormalTok{tarningsoddskvot }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $data
+##           kast
+## tarning    udda jämnt Total
+##   sexsidig   10    10    20
+##   tresidig   10    10    20
+##   Total      20    20    40
+## 
+## $measure
+##           odds ratio with 95% C.I.
+## tarning    estimate     lower    upper
+##   sexsidig        1        NA       NA
+##   tresidig        1 0.2807039 3.562472
+## 
+## $p.value
+##           two-sided
+## tarning    midp.exact fisher.exact chi.square
+##   sexsidig         NA           NA         NA
+##   tresidig          1            1          1
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,"method")
+## [1] "median-unbiased estimate & mid-p exact CI"
+\end{verbatim}
+
+Vi noterar att observerade oddskvoten mellan dessa två tärningar är
+\(1 \in (0.99, 1.01)\) men att konfidensintervallet är brett. Jag skulle
+inte rapportera detta som stöd för nollhypotesen att variablerna är
+oberoende. Om konfidensintervallet var mycket skulle tightare skulle jag
+ändå inte ha rapporterat som stöd för nollhypotesen eftersom
+populationsoddskvoten mellan dessa två tärningar är välkänd och starkt
+teoretiskt förankrad. Undantag under sådana omständigheter kräver
+extrema bevis och vi skulle anta att experimentet inte gått rätt till
+eller att det skett något extremt osannolikt snarare än att slumpens
+lagar ändrat på sig.
+
+\hypertarget{uppgift-3}{%
+\section{Uppgift 3}\label{uppgift-3}}
+
+Eftersom moderns alkoholkonsumtion är förklarande variabel och
+födelsevikt är responsvariabel och studien inte är prospektiv kommer kan
+vi inte estimera \(\pi_{j = 1| i =1}\), sannolikheten att en observation
+hamnar i kolumn ett givet att den är på rad \(1\), direkt med
+\(\widehat{\pi}_{j = 1| i =1} = n_{11}/n_{1+}\) direkt, efftersom våra
+sannolikhetsestimat vore deskriptiv statistisk och inte genuina
+sannolikheter, eftersom utfallen i responsvariablarna redan är kända.
+Utan vi måste betrakta responsen, bebisarnas vikt, som givna och använda
+att vi känner till att sannolikheten att en bebis är för tidigt född med
+låg vikt är \(7\) procent. Tack och lov, kan vi använda följande
+samband:
+
+\[
+\begin{aligned}
+  P(A|B)P(A) &= P(A \cap B) = P(B | A)P(A) &\Leftrightarrow\\
+      P(A|B) &= \frac{P(B|A)P(B)}{P(A)} &\Leftrightarrow \\
+\end{aligned}
+\] vilket i det här fallet är
+
+\[
+\begin{aligned}
+P(\text{Födelsevikten är låg givet att mamman konsumerar måttligt till mycket alkohol})  
+\\= \frac{P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)}P(\text{Bebisen har låg vikt})}{P(\text{Mamman konsumerar måttligt till mycket alkohol})}\\ = \frac{\pi_{i = 1  | j = 1}\times0.07}{\pi_{1\circ}} 
+\end{aligned}
+\]
+
+där \(\pi_{i = 1| j = 1}\) anger sannolikheten att observationen hamnar
+på rad \(i\) givet att den är i kolumn \(j\), dvs värdet på förklarande
+variabeln givet responsvariabeln, och \(\pi_{1\circ}\) anger
+sannolikheten att en observation hamna på rad \(1\).
+
+Vi kan estimera \[
+P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)
+\] med \(n_{11}/n_{+1} = 0.1\). Vi kan använda ``law total
+probability'', som i det här fallet blir på formen
+\[P(A) = P(A|B)P(B) + P(A|B^{c})P(B^{c})\] för att estimera
+
+\[
+P(\text{Mamman konsumerar måttligt till mycket alkohol})\\
+\] med
+\[(n_{11}/n_{+1})0.07+ (n_{12}/n_{+2})0.93 \\= 0.1\times0.07+ (2/30)\times0.93 \\= 0.069\]
+
+\hypertarget{section-5}{%
+\subsection{3.2}\label{section-5}}
+
+När studien är prosepktiv kan beräkna
+\(\widehat{\pi}_{j = 1| i = 1} = n_{11}/n_{1+}\) direkt, vilket blir
+\(10/30 = 1/3\).
+
+\hypertarget{section-6}{%
+\subsection{3.3}\label{section-6}}
+
+Sannolikheten blir olika på grund av att stickprovet bara är ett av
+många möjliga från den population där
+\(P(\text{Barnet är för tidigt fött med låg vikt})=0.07\). Det vill säga
+stickprovsestimatet för denna sannolikhet är inte \(0.07\), i detta
+fall, så likhet råder inte.
+
+
+\end{document}

@@ -2,7 +2,9 @@
 title: "A1"
 author: "Magnus Brogie, Rahul Duggal"
 date: "12 November 2018"
-# output: github_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 
@@ -11,6 +13,7 @@ date: "12 November 2018"
 ## 1. Hur många percent av män respektive kvinnor är för och emot laglig abort?
 
 ```{r }
+install.packages("tidyverse")
 library(tidyverse)
 tab1<- as.table(rbind(c(309, 191), c(319, 281)))
 dimnames(tab1) <- list(gender = c("women", "men"),opinion = c("favor","against"))
@@ -388,7 +391,9 @@ Vid jämförande av våra resultat med dessa finner vi att det är små skillnad
 <!-- oddsratio(tab1,rev="both") -->
 <!-- ``` -->
 
-## 1:2
+# 1.2
+
+## Odividerad kontingenstabellen
 
 ```{r}
 m11 = 557
@@ -412,8 +417,8 @@ women_men2 <- rowSums(cont_table2)
 admitted_not2 <- colSums(cont_table2)
 total2 <- sum(cont_table2)
 
-percentage_matrix2 <- (diag(1 / women_men) %*% cont_table2) * 100
-
+percentage_matrix2 <- (diag(1 / women_men2) %*% cont_table2) * 100
+rownames(percentage_matrix2) <- c("women", "men")
 
 
 #Calculate X2, G2 and p-values
@@ -435,7 +440,7 @@ gee2pearsonX2 <- summary(loglm(~gender+admission,cont_table2))
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
 oddsratio2 <- oddsratio(cont_table2,rev="columns")
-# oddsratio2
+oddsratio2
 odds_ratio2statistic <- oddsratio2$measure
 
 # odds_ratio2statistic
@@ -445,19 +450,27 @@ riskratio2 <- riskratio(cont_table2, rev="columns")
 riskratio2
 ```
 
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev $45 \%$ av männen och $30 \%$ av kvinnorna antagna. 
+
 ```{r}
 percentage_matrix2 %>% knitr::kable()
-
 ```
+
+Både likelihood ratio testet av oberoende med $G^{2}$ statistikan och Pearsons $X^{2}$-test av oberoende låter oss avfärda nollhypotesen att variablerna är oberoende med de flesta vanligt förekommande signifikanströsklar. 
 
 ```{r}
 gee2pearsonX2$tests %>% knitr::kable()
 ```
 
+Under nollhypotesen att variablerna är oberoende är populations oddskvoten $$\frac{\text{ oddsen att en man blir antagen }}{\text{ oddsen att en kvinna blir antagen }} = 1$$. I tabellen nedan framgår det att oddset att en man blir antagen estimeras till $1.84$ gånger så högt som att en kvinna blir det av stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad $.05$ som inte innefattar ett. Det vill säga denna stickprovs kvot är signifikant ettskild.
+
+
 ```{r}
 oddsratio2$measure %>% knitr::kable()
-
 ```
+
+Under nollhypotesen att variablerna är oberoende gäller motsvarande förhållande för riskkvoten: $$\frac{\text{ sannolikheten att en man blir antagen }}{\text{ sannolikheten att en kvinna blir antagen }} = 1$$. I tabellen nedan estimeras av stickprovsriskkvoten sannolikheten att en man blir antagen till avrundat $1.47$ gånger så hög som att en kvinna blir det, med ett konfidensintervall med konfidensgrad $.05$ som inte innefattar ett. Det vill säga denna stickprovskvot är signifikant ettskild.
+
 
 ```{r}
 
@@ -466,9 +479,8 @@ riskratio2$measure %>% knitr::kable()
 ```
 
 
-DBBL KLLA att det blir rätt riskratio oddsratio 
 
-
+## Kontingenstabellen delad med 10
 ```{r}
 m11_tenth = round(m11/10)
 m12_tenth = round(m12/10)
@@ -492,7 +504,7 @@ women_men3 = rowSums(cont_table3)
 admitted_not3 = colSums(cont_table3)
 total3 = sum(cont_table3)
 percentage_matrix3 <- (diag(1 / women_men3) %*% cont_table3) * 100
-
+rownames(percentage_matrix3) <- c("women", "men")
 #Calculate X2, G2 and p-values
 pearsonX2 <- chisq.test(cont_table2,correct=FALSE)
 # pearsonX2
@@ -502,7 +514,7 @@ pearsonX2_p <- pearsonX2$p.value
 
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table3,correct=FALSE)
-# library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 # loglm(~gender+admission,cont_table2)
 
 gee2pearsonX3 <- summary(loglm(~gender+admission,cont_table3))
@@ -515,24 +527,37 @@ oddsratio3 <- oddsratio(cont_table3,rev="columns")
 riskratio3 <- riskratio(cont_table3,rev="columns")
 ```
 
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev $45 \%$ av männen och $30 \%$ av kvinnorna antagna. Om dessa siffror påverkats något så är det avrundningen av kvoterna och inte av divideringen av antalet observationer. 
+
+
 ```{r}
 percentage_matrix3 %>% knitr::kable()
 
 ```
 
+Både likelihood ratio testet av oberoende med $G^{2}$ statistikan och Pearsons $X^{2}$-test av oberoende låter oss avfärda nollhypotesen att variablerna är oberoende med säg $.05$ i signifikanströskel. Dock kan vi se att statistikorna har ungefär dividerats med tio jämfört med det odividerade fallet. 
+
+<!-- Det är troligen avrundningen som gör att statistikorna inte dividerats exakt med tio.  (G^{2}, X^{2}) = (93.44941, 92.205) -->
+
+
 ```{r}
 gee2pearsonX3$tests %>% knitr::kable()
 ```
 
+I tabellen nedan framgår det att oddset att en man blir antagen estimeras till $1.84$ gånger så högt som att en kvinna blir det av stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad $.05$ som inte innefattar ett. Det vill säga denna stickrprovskvot är signifikant ettskild. Dock har jämfört med det odividerade fallet konfidensintervallet blivit ungefär $1$ enhet längre. 
+
 ```{r}
 oddsratio3$measure %>% knitr::kable()
-
 ```
+
+I tabellen nedan framgår det att sannolikheten att en man blir antagen estimeras till avrundat $1.47$ gånger så hög som att en kvinna blir det av stickprovsriskkvoten, med ett konfidensintervall med konfidensgrad $.05$ som inte innefattar ett. Det vill säga denna stickprovskvot är signifikant ettskild. Dock har jämfört med det odividerade fallet konfidensintervallet blivit ungefär $0.5$ enhet längre.
 
 ```{r}
 riskratio3$measure %>% knitr::kable()
 ```
 
+
+## Kontingenstabellen delad med 100
 ```{r}
 m11_hundreth = round(m11/100)
 m12_hundreth = round(m12/100)
@@ -541,6 +566,9 @@ m22_hundreth = round(m22/100)
 
 cont_table4 <- as.table(rbind(c(m11_hundreth, m12_hundreth), c(m21_hundreth, m22_hundreth)))
 dimnames(cont_table4) <- list(gender = c("women", "men"), admission = c("admitted","not_admitted"))
+
+
+cont_table4
 
 # cont_table4 <- matrix(
 #   c(m11_hundreth, m12_hundreth, m21_hundreth, m22_hundreth), # the data elements 
@@ -553,7 +581,7 @@ women_men4 = rowSums(cont_table4)
 admitted_not4 = colSums(cont_table4)
 total4 = sum(cont_table4)
 percentage_matrix4 <- (diag(1 / women_men4) %*% cont_table4) * 100
-
+rownames(percentage_matrix4) <- c("women", "men")
 
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table4,correct=FALSE)
@@ -569,15 +597,23 @@ riskratio4 <- riskratio(cont_table4,rev="columns")
 gee2pearsonX4 <- summary(loglm(~gender+admission,cont_table4))
 ```
 
+I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev $44 \%$ av männen och $31 \%$ av kvinnorna antagna. Skillnaderna här mot de andra två fallen beror enbart på avrudningen.
+
 ```{r}
 percentage_matrix4 %>% knitr::kable()
 
 ```
 
+Både likelihood ratio testet av oberoende med $G^{2}$ statistikan och Pearsons $X^{2}$-test av oberoende låter oss inte längre avfärda nollhypotesen att variablerna är oberoende med någon rimlig signifikanströskel. De har krympt med samma magnitud som antalet observationer.
+
+
 ```{r}
 gee2pearsonX4$tests %>% knitr::kable()
 
 ```
+
+Nu ser vi även i tabellerna nedan oddskvots- och riskkvotsestimaten ut att ha påverkats av minskningen av antalet observationer, men det måste vara avrundningen som spökar eftersom proportionera mellan de olika cellerna i kontingenstabellen inte rimligen kan påverkas av divideringen. Dock har konfidensintervallen för estimaten växt, vilket är väntat, och de omfattar nu ett, så inte heller dessa kan sägas vara signifikanta.
+
 
 ```{r}
 oddsratio4$measure %>% knitr::kable()
@@ -587,6 +623,85 @@ oddsratio4$measure %>% knitr::kable()
 riskratio4$measure %>% knitr::kable()
 ```
 
+## 2.3
+
+```{r}
+populationsoddskvot <- ((1/3)/(1 - 1/3))/((0.5)/(1 - 0.5))
+```
+
+
+Vi såg i föregående deluppgift att det räcker med drygt $10$ observationer per ruta för att få en signifikanta oddskvoter. Vi räknar varje gång en balanserad tärning rullar ett jämt resultat som en framgång och alla andra resultat som ett misslyckande. Denna sanna oddskvoten för att lyckas mellan en balanserad tresidig tärning och en balansread sexsidiga tärningen är `r populationsoddskvot`. När vi rullar en sexsidig tärning tjugo gånger och niosidig tärning tjugo gånger får vi 
+
+```{r}
+
+sex_sidor_udda = 10
+sex_sidor_jamnt = 10
+tre_sidor_udda = 10
+tre_sidor_jamnt = 10
+
+tarningstabell <- as.table(rbind(c(sex_sidor_udda, sex_sidor_jamnt), c(tre_sidor_udda, tre_sidor_jamnt)))
+
+dimnames(tarningstabell) <- list(tarning = c("sexsidig", "tresidig"), kast = c("udda","jämnt"))
+
+
+tarningsoddskvot <- oddsratio(tarningstabell)
+
+tarningsoddskvot 
+```
+
+Vi noterar att observerade oddskvoten mellan dessa två tärningar är $1 \in (0.99, 1.01)$ men att konfidensintervallet är brett. Jag skulle inte rapportera detta som stöd för nollhypotesen att variablerna är oberoende. Om konfidensintervallet var mycket skulle tightare skulle jag ändå inte ha rapporterat som stöd för nollhypotesen eftersom populationsoddskvoten mellan dessa två tärningar är välkänd och starkt teoretiskt förankrad. Undantag under sådana omständigheter kräver extrema bevis och vi skulle anta att experimentet inte gått rätt till eller att det skett något extremt osannolikt snarare än att slumpens lagar ändrat på sig. 
+
+
+# Uppgift 3
+
+Eftersom moderns alkoholkonsumtion är förklarande variabel och födelsevikt är responsvariabel och studien inte är prospektiv kommer kan vi inte estimera $\pi_{j = 1| i =1}$, sannolikheten att en observation hamnar i kolumn ett givet att den är på rad $1$, direkt med $\widehat{\pi}_{j = 1| i =1} = n_{11}/n_{1+}$ direkt, efftersom våra sannolikhetsestimat vore deskriptiv statistisk och inte genuina sannolikheter, eftersom utfallen i responsvariablarna redan är kända. Utan vi måste betrakta responsen, bebisarnas vikt, som givna och använda att vi känner till att sannolikheten att en bebis är för tidigt född med låg vikt är $7$ procent. Tack och lov, kan vi använda följande samband:
+
+$$
+\begin{aligned}
+  P(A|B)P(A) &= P(A \cap B) = P(B | A)P(A) &\Leftrightarrow\\
+      P(A|B) &= \frac{P(B|A)P(B)}{P(A)} &\Leftrightarrow \\
+\end{aligned}
+$$
+vilket i det här fallet är
 
 
 
+
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- P(\text{Födelsevikten är låg givet att mamman konsumerar måttligt till mycket alkohol})   -->
+<!-- \\= \frac{P(\text{Födelsevikten är låg och mamman konsumerar måttligt till mycket alkohol}) }{P(\text{Mamman konsumerar måttligt till mycket alkohol})} = \frac{\pi_{11}}{\pi_{1\circ}} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+$$
+\begin{aligned}
+P(\text{Födelsevikten är låg givet att mamman konsumerar måttligt till mycket alkohol})  
+\\= \frac{P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)}P(\text{Bebisen har låg vikt})}{P(\text{Mamman konsumerar måttligt till mycket alkohol})}\\ = \frac{\pi_{i = 1  | j = 1}\times0.07}{\pi_{1\circ}} 
+\end{aligned}
+$$
+
+
+där $\pi_{i = 1| j = 1}$ anger sannolikheten att observationen hamnar på rad $i$ givet att den är i kolumn $j$, dvs värdet på förklarande variabeln givet responsvariabeln, och $\pi_{1\circ}$ anger sannolikheten att en observation hamna på rad $1$. 
+ 
+ Vi kan estimera
+$$
+P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)
+$$
+med $n_{11}/n_{+1} = 0.1$. Vi kan använda "law total probability", som i det här fallet blir på formen $$P(A) = P(A|B)P(B) + P(A|B^{c})P(B^{c})$$ för att estimera 
+
+$$
+P(\text{Mamman konsumerar måttligt till mycket alkohol})\\
+$$
+med $$(n_{11}/n_{+1})0.07+ (n_{12}/n_{+2})0.93 \\= 0.1\times0.07+ (2/30)\times0.93 \\= 0.069$$
+
+
+<!-- \\= \frac{\widehat{\pi}_{11}\widehat{\pi}_{i\circ}}{\widehat{\pi}_{ij}} -->
+<!-- \end{aligned} -->
+
+## 3.2
+
+När studien är prosepktiv kan beräkna $\widehat{\pi}_{j = 1| i = 1} = n_{11}/n_{1+}$ direkt, vilket blir $10/30 = 1/3$.
+
+## 3.3
+
+Sannolikheten blir olika på grund av att stickprovet bara är ett av många möjliga från den population där $P(\text{Barnet är för tidigt fött med låg vikt})=0.07$. Det vill säga stickprovsestimatet för denna sannolikhet är inte $0.07$, i detta fall, så likhet råder inte.

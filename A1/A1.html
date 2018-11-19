@@ -740,8 +740,11 @@ riskratio(tab1,rev=&quot;neither&quot;)$measure %&gt;% knitr::kable()</code></pr
 <!-- oddsratio(tab1,rev="both") -->
 <!-- ``` -->
 </div>
-<div id="section-3" class="section level2">
-<h2>1:2</h2>
+</div>
+<div id="section-3" class="section level1">
+<h1>1.2</h1>
+<div id="odividerad-kontingenstabellen" class="section level2">
+<h2>Odividerad kontingenstabellen</h2>
 <pre class="r"><code>m11 = 557
 m12 = 1835 - 557
 m21 = 1198
@@ -763,8 +766,8 @@ women_men2 &lt;- rowSums(cont_table2)
 admitted_not2 &lt;- colSums(cont_table2)
 total2 &lt;- sum(cont_table2)
 
-percentage_matrix2 &lt;- (diag(1 / women_men) %*% cont_table2) * 100
-
+percentage_matrix2 &lt;- (diag(1 / women_men2) %*% cont_table2) * 100
+rownames(percentage_matrix2) &lt;- c(&quot;women&quot;, &quot;men&quot;)
 
 
 #Calculate X2, G2 and p-values
@@ -791,8 +794,32 @@ gee2pearsonX2 &lt;- summary(loglm(~gender+admission,cont_table2))
 #Calculate risk/odds ratio and confidence interval
 library(epitools)    # the epitools package must be installed #
 oddsratio2 &lt;- oddsratio(cont_table2,rev=&quot;columns&quot;)
-# oddsratio2
-odds_ratio2statistic &lt;- oddsratio2$measure
+oddsratio2</code></pre>
+<pre><code>## $data
+##        admission
+## gender  not_admitted admitted Total
+##   women         1278      557  1835
+##   men           1493     1198  2691
+##   Total         2771     1755  4526
+## 
+## $measure
+##        odds ratio with 95% C.I.
+## gender  estimate    lower    upper
+##   women  1.00000       NA       NA
+##   men    1.84063 1.624567 2.087058
+## 
+## $p.value
+##        two-sided
+## gender  midp.exact fisher.exact chi.square
+##   women         NA           NA         NA
+##   men            0 4.835903e-22 7.8136e-22
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,&quot;method&quot;)
+## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
+<pre class="r"><code>odds_ratio2statistic &lt;- oddsratio2$measure
 
 # odds_ratio2statistic
 # oddsratio2$measure
@@ -823,25 +850,30 @@ riskratio2</code></pre>
 ## 
 ## attr(,&quot;method&quot;)
 ## [1] &quot;Unconditional MLE &amp; normal approximation (Wald) CI&quot;</code></pre>
+<p>I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev <span class="math inline">\(45 \%\)</span> av männen och <span class="math inline">\(30 \%\)</span> av kvinnorna antagna.</p>
 <pre class="r"><code>percentage_matrix2 %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
+<th></th>
 <th align="right">admitted</th>
 <th align="right">not_admitted</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">111.4000</td>
-<td align="right">255.6000</td>
+<td>women</td>
+<td align="right">30.35422</td>
+<td align="right">69.64578</td>
 </tr>
 <tr class="even">
-<td align="right">199.6667</td>
-<td align="right">248.8333</td>
+<td>men</td>
+<td align="right">44.51877</td>
+<td align="right">55.48123</td>
 </tr>
 </tbody>
 </table>
+<p>Både likelihood ratio testet av oberoende med <span class="math inline">\(G^{2}\)</span> statistikan och Pearsons <span class="math inline">\(X^{2}\)</span>-test av oberoende låter oss avfärda nollhypotesen att variablerna är oberoende med de flesta vanligt förekommande signifikanströsklar.</p>
 <pre class="r"><code>gee2pearsonX2$tests %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -867,6 +899,7 @@ riskratio2</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Under nollhypotesen att variablerna är oberoende är populations oddskvoten <span class="math display">\[\frac{\text{ oddsen att en man blir antagen }}{\text{ oddsen att en kvinna blir antagen }} = 1\]</span>. I tabellen nedan framgår det att oddset att en man blir antagen estimeras till <span class="math inline">\(1.84\)</span> gånger så högt som att en kvinna blir det av stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad <span class="math inline">\(.05\)</span> som inte innefattar ett. Det vill säga denna stickprovs kvot är signifikant ettskild.</p>
 <pre class="r"><code>oddsratio2$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -892,6 +925,7 @@ riskratio2</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Under nollhypotesen att variablerna är oberoende gäller motsvarande förhållande för riskkvoten: <span class="math display">\[\frac{\text{ sannolikheten att en man blir antagen }}{\text{ sannolikheten att en kvinna blir antagen }} = 1\]</span>. I tabellen nedan estimeras av stickprovsriskkvoten sannolikheten att en man blir antagen till avrundat <span class="math inline">\(1.47\)</span> gånger så hög som att en kvinna blir det, med ett konfidensintervall med konfidensgrad <span class="math inline">\(.05\)</span> som inte innefattar ett. Det vill säga denna stickprovskvot är signifikant ettskild.</p>
 <pre class="r"><code>riskratio2$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -917,7 +951,9 @@ riskratio2</code></pre>
 </tr>
 </tbody>
 </table>
-<p>DBBL KLLA att det blir rätt riskratio oddsratio</p>
+</div>
+<div id="kontingenstabellen-delad-med-10" class="section level2">
+<h2>Kontingenstabellen delad med 10</h2>
 <pre class="r"><code>m11_tenth = round(m11/10)
 m12_tenth = round(m12/10)
 m21_tenth = round(m21/10)
@@ -940,7 +976,7 @@ women_men3 = rowSums(cont_table3)
 admitted_not3 = colSums(cont_table3)
 total3 = sum(cont_table3)
 percentage_matrix3 &lt;- (diag(1 / women_men3) %*% cont_table3) * 100
-
+rownames(percentage_matrix3) &lt;- c(&quot;women&quot;, &quot;men&quot;)
 #Calculate X2, G2 and p-values
 pearsonX2 &lt;- chisq.test(cont_table2,correct=FALSE)
 # pearsonX2
@@ -950,7 +986,7 @@ pearsonX2_p &lt;- pearsonX2$p.value
 
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table3,correct=FALSE)
-# library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
+library(MASS)     # the MASS package must be installed (Rstudio menu bar: Tools - Install packages...)
 # loglm(~gender+admission,cont_table2)
 
 gee2pearsonX3 &lt;- summary(loglm(~gender+admission,cont_table3))
@@ -961,25 +997,31 @@ gee2pearsonX3 &lt;- summary(loglm(~gender+admission,cont_table3))
 library(epitools)    # the epitools package must be installed #
 oddsratio3 &lt;- oddsratio(cont_table3,rev=&quot;columns&quot;)
 riskratio3 &lt;- riskratio(cont_table3,rev=&quot;columns&quot;)</code></pre>
+<p>I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev <span class="math inline">\(45 \%\)</span> av männen och <span class="math inline">\(30 \%\)</span> av kvinnorna antagna. Om dessa siffror påverkats något så är det avrundningen av kvoterna och inte av divideringen av antalet observationer.</p>
 <pre class="r"><code>percentage_matrix3 %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
+<th></th>
 <th align="right">admitted</th>
 <th align="right">not_admitted</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td>women</td>
 <td align="right">30.43478</td>
 <td align="right">69.56522</td>
 </tr>
 <tr class="even">
+<td>men</td>
 <td align="right">44.60967</td>
 <td align="right">55.39033</td>
 </tr>
 </tbody>
 </table>
+<p>Både likelihood ratio testet av oberoende med <span class="math inline">\(G^{2}\)</span> statistikan och Pearsons <span class="math inline">\(X^{2}\)</span>-test av oberoende låter oss avfärda nollhypotesen att variablerna är oberoende med säg <span class="math inline">\(.05\)</span> i signifikanströskel. Dock kan vi se att statistikorna har ungefär dividerats med tio jämfört med det odividerade fallet.</p>
+<!-- Det är troligen avrundningen som gör att statistikorna inte dividerats exakt med tio.  (G^{2}, X^{2}) = (93.44941, 92.205) -->
 <pre class="r"><code>gee2pearsonX3$tests %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1005,6 +1047,7 @@ riskratio3 &lt;- riskratio(cont_table3,rev=&quot;columns&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
+<p>I tabellen nedan framgår det att oddset att en man blir antagen estimeras till <span class="math inline">\(1.84\)</span> gånger så högt som att en kvinna blir det av stickprovsoddskvoten, med ett konfidensintervall med konfidensgrad <span class="math inline">\(.05\)</span> som inte innefattar ett. Det vill säga denna stickrprovskvot är signifikant ettskild. Dock har jämfört med det odividerade fallet konfidensintervallet blivit ungefär <span class="math inline">\(1\)</span> enhet längre.</p>
 <pre class="r"><code>oddsratio3$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1030,6 +1073,7 @@ riskratio3 &lt;- riskratio(cont_table3,rev=&quot;columns&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
+<p>I tabellen nedan framgår det att sannolikheten att en man blir antagen estimeras till avrundat <span class="math inline">\(1.47\)</span> gånger så hög som att en kvinna blir det av stickprovsriskkvoten, med ett konfidensintervall med konfidensgrad <span class="math inline">\(.05\)</span> som inte innefattar ett. Det vill säga denna stickprovskvot är signifikant ettskild. Dock har jämfört med det odividerade fallet konfidensintervallet blivit ungefär <span class="math inline">\(0.5\)</span> enhet längre.</p>
 <pre class="r"><code>riskratio3$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1055,6 +1099,9 @@ riskratio3 &lt;- riskratio(cont_table3,rev=&quot;columns&quot;)</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="kontingenstabellen-delad-med-100" class="section level2">
+<h2>Kontingenstabellen delad med 100</h2>
 <pre class="r"><code>m11_hundreth = round(m11/100)
 m12_hundreth = round(m12/100)
 m21_hundreth = round(m21/100)
@@ -1063,7 +1110,13 @@ m22_hundreth = round(m22/100)
 cont_table4 &lt;- as.table(rbind(c(m11_hundreth, m12_hundreth), c(m21_hundreth, m22_hundreth)))
 dimnames(cont_table4) &lt;- list(gender = c(&quot;women&quot;, &quot;men&quot;), admission = c(&quot;admitted&quot;,&quot;not_admitted&quot;))
 
-# cont_table4 &lt;- matrix(
+
+cont_table4</code></pre>
+<pre><code>##        admission
+## gender  admitted not_admitted
+##   women        6           13
+##   men         12           15</code></pre>
+<pre class="r"><code># cont_table4 &lt;- matrix(
 #   c(m11_hundreth, m12_hundreth, m21_hundreth, m22_hundreth), # the data elements 
 #   nrow=2,              # number of rows 
 #   ncol=2,              # number of columns 
@@ -1074,7 +1127,7 @@ women_men4 = rowSums(cont_table4)
 admitted_not4 = colSums(cont_table4)
 total4 = sum(cont_table4)
 percentage_matrix4 &lt;- (diag(1 / women_men4) %*% cont_table4) * 100
-
+rownames(percentage_matrix4) &lt;- c(&quot;women&quot;, &quot;men&quot;)
 
 #Calculate X2, G2 and p-values
 # chisq.test(cont_table4,correct=FALSE)
@@ -1088,25 +1141,30 @@ library(epitools)    # the epitools package must be installed #
 oddsratio4 &lt;- oddsratio(cont_table4,rev=&quot;columns&quot;)
 riskratio4 &lt;- riskratio(cont_table4,rev=&quot;columns&quot;)  
 gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
+<p>I procentmatrisen nedan kan vi se att avrundat till inga decimaler så blev <span class="math inline">\(44 \%\)</span> av männen och <span class="math inline">\(31 \%\)</span> av kvinnorna antagna. Skillnaderna här mot de andra två fallen beror enbart på avrudningen.</p>
 <pre class="r"><code>percentage_matrix4 %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
+<th></th>
 <th align="right">admitted</th>
 <th align="right">not_admitted</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td>women</td>
 <td align="right">31.57895</td>
 <td align="right">68.42105</td>
 </tr>
 <tr class="even">
+<td>men</td>
 <td align="right">44.44444</td>
 <td align="right">55.55556</td>
 </tr>
 </tbody>
 </table>
+<p>Både likelihood ratio testet av oberoende med <span class="math inline">\(G^{2}\)</span> statistikan och Pearsons <span class="math inline">\(X^{2}\)</span>-test av oberoende låter oss inte längre avfärda nollhypotesen att variablerna är oberoende med någon rimlig signifikanströskel. De har krympt med samma magnitud som antalet observationer.</p>
 <pre class="r"><code>gee2pearsonX4$tests %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1132,6 +1190,7 @@ gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Nu ser vi även i tabellerna nedan oddskvots- och riskkvotsestimaten ut att ha påverkats av minskningen av antalet observationer, men det måste vara avrundningen som spökar eftersom proportionera mellan de olika cellerna i kontingenstabellen inte rimligen kan påverkas av divideringen. Dock har konfidensintervallen för estimaten växt, vilket är väntat, och de omfattar nu ett, så inte heller dessa kan sägas vara signifikanta.</p>
 <pre class="r"><code>oddsratio4$measure %&gt;% knitr::kable()</code></pre>
 <table>
 <thead>
@@ -1182,6 +1241,88 @@ gee2pearsonX4 &lt;- summary(loglm(~gender+admission,cont_table4))</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="section-4" class="section level2">
+<h2>2.3</h2>
+<pre class="r"><code>populationsoddskvot &lt;- ((1/3)/(1 - 1/3))/((0.5)/(1 - 0.5))</code></pre>
+<p>Vi såg i föregående deluppgift att det räcker med drygt <span class="math inline">\(10\)</span> observationer per ruta för att få en signifikanta oddskvoter. Vi räknar varje gång en balanserad tärning rullar ett jämt resultat som en framgång och alla andra resultat som ett misslyckande. Denna sanna oddskvoten för att lyckas mellan en balanserad tresidig tärning och en balansread sexsidiga tärningen är 0.5. När vi rullar en sexsidig tärning tjugo gånger och niosidig tärning tjugo gånger får vi</p>
+<pre class="r"><code>sex_sidor_udda = 10
+sex_sidor_jamnt = 10
+tre_sidor_udda = 10
+tre_sidor_jamnt = 10
+
+tarningstabell &lt;- as.table(rbind(c(sex_sidor_udda, sex_sidor_jamnt), c(tre_sidor_udda, tre_sidor_jamnt)))
+
+dimnames(tarningstabell) &lt;- list(tarning = c(&quot;sexsidig&quot;, &quot;tresidig&quot;), kast = c(&quot;udda&quot;,&quot;jämnt&quot;))
+
+
+tarningsoddskvot &lt;- oddsratio(tarningstabell)
+
+tarningsoddskvot </code></pre>
+<pre><code>## $data
+##           kast
+## tarning    udda jämnt Total
+##   sexsidig   10    10    20
+##   tresidig   10    10    20
+##   Total      20    20    40
+## 
+## $measure
+##           odds ratio with 95% C.I.
+## tarning    estimate     lower    upper
+##   sexsidig        1        NA       NA
+##   tresidig        1 0.2807039 3.562472
+## 
+## $p.value
+##           two-sided
+## tarning    midp.exact fisher.exact chi.square
+##   sexsidig         NA           NA         NA
+##   tresidig          1            1          1
+## 
+## $correction
+## [1] FALSE
+## 
+## attr(,&quot;method&quot;)
+## [1] &quot;median-unbiased estimate &amp; mid-p exact CI&quot;</code></pre>
+<p>Vi noterar att observerade oddskvoten mellan dessa två tärningar är <span class="math inline">\(1 \in (0.99, 1.01)\)</span> men att konfidensintervallet är brett. Jag skulle inte rapportera detta som stöd för nollhypotesen att variablerna är oberoende. Om konfidensintervallet var mycket skulle tightare skulle jag ändå inte ha rapporterat som stöd för nollhypotesen eftersom populationsoddskvoten mellan dessa två tärningar är välkänd och starkt teoretiskt förankrad. Undantag under sådana omständigheter kräver extrema bevis och vi skulle anta att experimentet inte gått rätt till eller att det skett något extremt osannolikt snarare än att slumpens lagar ändrat på sig.</p>
+</div>
+</div>
+<div id="uppgift-3" class="section level1">
+<h1>Uppgift 3</h1>
+<p>Eftersom moderns alkoholkonsumtion är förklarande variabel och födelsevikt är responsvariabel och studien inte är prospektiv kommer kan vi inte estimera <span class="math inline">\(\pi_{j = 1| i =1}\)</span>, sannolikheten att en observation hamnar i kolumn ett givet att den är på rad <span class="math inline">\(1\)</span>, direkt med <span class="math inline">\(\widehat{\pi}_{j = 1| i =1} = n_{11}/n_{1+}\)</span> direkt, efftersom våra sannolikhetsestimat vore deskriptiv statistisk och inte genuina sannolikheter, eftersom utfallen i responsvariablarna redan är kända. Utan vi måste betrakta responsen, bebisarnas vikt, som givna och använda att vi känner till att sannolikheten att en bebis är för tidigt född med låg vikt är <span class="math inline">\(7\)</span> procent. Tack och lov, kan vi använda följande samband:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  P(A|B)P(A) &amp;= P(A \cap B) = P(B | A)P(A) &amp;\Leftrightarrow\\
+      P(A|B) &amp;= \frac{P(B|A)P(B)}{P(A)} &amp;\Leftrightarrow \\
+\end{aligned}
+\]</span> vilket i det här fallet är</p>
+<!-- $$ -->
+<!-- \begin{aligned} -->
+<!-- P(\text{Födelsevikten är låg givet att mamman konsumerar måttligt till mycket alkohol})   -->
+<!-- \\= \frac{P(\text{Födelsevikten är låg och mamman konsumerar måttligt till mycket alkohol}) }{P(\text{Mamman konsumerar måttligt till mycket alkohol})} = \frac{\pi_{11}}{\pi_{1\circ}} -->
+<!-- \end{aligned} -->
+<!-- $$ -->
+<p><span class="math display">\[
+\begin{aligned}
+P(\text{Födelsevikten är låg givet att mamman konsumerar måttligt till mycket alkohol})  
+\\= \frac{P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)}P(\text{Bebisen har låg vikt})}{P(\text{Mamman konsumerar måttligt till mycket alkohol})}\\ = \frac{\pi_{i = 1  | j = 1}\times0.07}{\pi_{1\circ}} 
+\end{aligned}
+\]</span></p>
+<p>där <span class="math inline">\(\pi_{i = 1| j = 1}\)</span> anger sannolikheten att observationen hamnar på rad <span class="math inline">\(i\)</span> givet att den är i kolumn <span class="math inline">\(j\)</span>, dvs värdet på förklarande variabeln givet responsvariabeln, och <span class="math inline">\(\pi_{1\circ}\)</span> anger sannolikheten att en observation hamna på rad <span class="math inline">\(1\)</span>.</p>
+<p>Vi kan estimera <span class="math display">\[
+P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)
+\]</span> med <span class="math inline">\(n_{11}/n_{+1} = 0.1\)</span>. Vi kan använda “law total probability”, som i det här fallet blir på formen <span class="math display">\[P(A) = P(A|B)P(B) + P(A|B^{c})P(B^{c})\]</span> för att estimera</p>
+<p><span class="math display">\[
+P(\text{Mamman konsumerar måttligt till mycket alkohol})\\
+\]</span> med <span class="math display">\[(n_{11}/n_{+1})0.07+ (n_{12}/n_{+2})0.93 \\= 0.1\times0.07+ (2/30)\times0.93 \\= 0.069\]</span></p>
+<!-- \\= \frac{\widehat{\pi}_{11}\widehat{\pi}_{i\circ}}{\widehat{\pi}_{ij}} -->
+<!-- \end{aligned} -->
+<div id="section-5" class="section level2">
+<h2>3.2</h2>
+<p>När studien är prosepktiv kan beräkna <span class="math inline">\(\widehat{\pi}_{j = 1| i = 1} = n_{11}/n_{1+}\)</span> direkt, vilket blir <span class="math inline">\(10/30 = 1/3\)</span>.</p>
+</div>
+<div id="section-6" class="section level2">
+<h2>3.3</h2>
+<p>Sannolikheten blir olika på grund av att stickprovet bara är ett av många möjliga från den population där <span class="math inline">\(P(\text{Barnet är för tidigt fött med låg vikt})=0.07\)</span>. Det vill säga stickprovsestimatet för denna sannolikhet är inte <span class="math inline">\(0.07\)</span>, i detta fall, så likhet råder inte.</p>
 </div>
 </div>
 
