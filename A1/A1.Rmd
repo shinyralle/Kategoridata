@@ -2,9 +2,7 @@
 title: "A1"
 author: "Magnus Brogie, Rahul Duggal"
 date: "12 November 2018"
-output:
-  pdf_document: default
-  html_document: default
+output: pdf_document
 ---
 
 
@@ -13,7 +11,6 @@ output:
 ## 1. Hur många percent av män respektive kvinnor är för och emot laglig abort?
 
 ```{r }
-install.packages("tidyverse")
 library(tidyverse)
 tab1<- as.table(rbind(c(309, 191), c(319, 281)))
 dimnames(tab1) <- list(gender = c("women", "men"),opinion = c("favor","against"))
@@ -159,7 +156,7 @@ kön gäller att
 $$
 \pi_{ij} = \pi_{i\circ}\pi_{\circ j}
 $$
-där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Sannolikheten $\pi_{ij}$ kan skattas med hjälp av observationera i kontingens tabellen på följande vis $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $\n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och $n_{+j}$ motsvarande för kolumn $j$. Det ger oss att under nollhypotesen följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska med HUR MÅNGA FRIHETSGRADER `r chi_two_statistic` som vi kan jämföra med en tabell.  
+där $\pi_{ij}$ anger sannoliketen att en observation hamnar på rad $i$ och kolumn $j$,  $\pi_{i\circ}$ anger sannolikheten att en observation hamnar på rad $i$ och $\pi_{\circ j}$ anger sannolikheten att en observation hamnar på kolumn $j$. Sannolikheten $\pi_{ij}$ kan skattas med hjälp av observationera i kontingens tabellen på följande vis $$\widehat{\pi}_{ij} = \frac{n_{ij}}{n_{tot}}$$, där $n_{tot}$ anger det totala antalet observationer. Vi kan även skatta sannolikheten att en observation hamnar i rad $i$ med $\widehat{\pi}_{i\circ} =  \frac{n_{i+}}{n_{tot}}$, där $n_{i+}$ anger summan av alla observationer på rad $i$ och $n_{+j}$ motsvarande för kolumn $j$. Det ger oss att under nollhypotesen följande skattningar av de förväntade värdena $\widehat{e}_{ij} = n\widehat{\pi}_{i\circ}\widehat{\pi}_{\circ j}$. Dessa uträkningar ger oss vår chitvå statiska med HUR MÅNGA FRIHETSGRADER `r chi_two_statistic` som vi kan jämföra med en tabell.  
 
 Motsvarande $X^{2}$ statistika som genereras av den till uppgiften bifogade testkoden är `r test_chi_two_statistic`.
 
@@ -685,7 +682,7 @@ där $\pi_{i = 1| j = 1}$ anger sannolikheten att observationen hamnar på rad $
  
  Vi kan estimera
 $$
-P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt)
+P(\text{Mamman konsumerar måttligt alkohol givet att bebisen har låg vikt})
 $$
 med $n_{11}/n_{+1} = 0.1$. Vi kan använda "law total probability", som i det här fallet blir på formen $$P(A) = P(A|B)P(B) + P(A|B^{c})P(B^{c})$$ för att estimera 
 
